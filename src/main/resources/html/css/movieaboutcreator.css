@@ -1,0 +1,121 @@
+body {
+	font-family: Arial,Verdana,Helvetica, sans-serif;
+	font-size:normal;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+table { 
+	border-spacing: 0px;
+	border-collapse:collapse;
+	aborder:1px solid red;
+}
+table td{
+	border-spacing: 0px;
+	aborder:1px solid green;
+}
+
+.background {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+}	
+
+.transparent {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 2;
+}	
+
+.folder {
+	position: absolute;
+	top: 376px;
+	left: 87px;
+	width: 224px;
+	height: 332px;
+	z-index: 3;
+}
+
+.box_overlay {
+	position: absolute;
+	top: 343px;
+	left: 57px;
+	z-index: 4;
+}
+
+.toprow {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 5;
+	aborderborder:1px solid #FF0000;
+}	
+.title {
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 21pt;
+}
+.year {
+    color: #ececec;
+    font-weight: bold;
+    font-size: 18pt;
+}
+.duration {
+    color: #ececec;
+    font-weight: bold;
+    font-size: 18pt;
+}
+.rating {
+    color: #cccccc;
+    font-weight: normal;
+    font-size: 16pt;
+}
+
+.plotbox {
+	position: absolute;
+	top: 462px;
+	left: 352px;
+    width: 500px;
+	z-index: 5;
+	aborder:1px solid #FF0000;
+}
+.plottext {
+	color: #ececec;
+    font-weight: normal;
+    font-size: 14pt;
+	line-height: 21px;
+}
+
+.peoplebox {
+	position: absolute;
+	top: 461px;
+	left: 867px;
+	z-index: 5;
+	border: 0px;
+	aborder:1px solid #FF0000;
+}
+
+.fileprops {
+	position: absolute;
+	top: 670px;
+	left: 352px;
+	z-index: 5;
+	aborder:1px solid #FF0000;
+}
+
+.key {
+    color: #868686;
+    font-weight: normal;
+    font-size: 14pt;
+	vertical-align: top;
+}
+
+.value {
+    color: #ececec;
+    font-weight: normal;
+    font-size: 14pt;
+	vertical-align: top;
+}
+
