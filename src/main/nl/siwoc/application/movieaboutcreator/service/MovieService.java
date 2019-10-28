@@ -2,11 +2,16 @@ package nl.siwoc.application.movieaboutcreator.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ServiceLoader;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -15,13 +20,21 @@ import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator.Feature;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoFolderCollector;
+import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.GetConfigurationResponse;
 import nl.siwoc.application.movieaboutcreator.Properties;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoBackgroundCollector;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoDetailsCollector;
 import nl.siwoc.application.movieaboutcreator.controller.MainController;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
 import nl.siwoc.application.movieaboutcreator.model.Movie.Actor;
+import nl.siwoc.application.movieaboutcreator.model.fileprops.AudioChannels;
+import nl.siwoc.application.movieaboutcreator.model.fileprops.AudioCodec;
+import nl.siwoc.application.movieaboutcreator.model.fileprops.Container;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.FileProp;
+import nl.siwoc.application.movieaboutcreator.model.fileprops.Resolution;
+import nl.siwoc.application.movieaboutcreator.model.fileprops.VideoCodec;
+import nl.siwoc.mediainfo.FileProber;
+import nl.siwoc.mediainfo.MediaInfo;
 import nl.siwoc.application.movieaboutcreator.model.MovieFileFilter;
 import nl.siwoc.application.movieaboutcreator.model.XmlDetails;
 
@@ -44,7 +57,9 @@ public class MovieService {
 	private MainController controller;
 	private MovieInfoDetailsCollector detailsCollector;
 	private MovieInfoFolderCollector folderCollector;
+	private File folderImageFile = new File("./generated/folder.jpg");
 	private MovieInfoBackgroundCollector backgroundCollector;
+	private static FileProber fp;
 
 	private static final String SET_VALUES_BASE = "function setText(id,newvalue) {\r\n" + 
 			"	var s= document.getElementById(id);\r\n" + 
@@ -174,8 +189,49 @@ public class MovieService {
 		if (movie != null) {
 			writeBackgroundImage(movie);
 			writeFolderImage(movie);
+			getFileProperties(movie);
 			writeSetValues(movie);
 		}
+	}
+	
+	private void getFileProperties(Movie movie) {
+		MediaInfo mediaInfo;
+		try {
+			fp = new FileProber();
+			mediaInfo = fp.getMediaInfo(movie.getFile().getAbsolutePath());
+			try {
+				movie.setContainer(Container.valueOf(mediaInfo.getContainer().toUpperCase()));
+			} catch (IllegalArgumentException e) {
+				controller.setStatusLine("Unknown Container: [" + mediaInfo.getContainer().toUpperCase() + "]");
+			}
+			try {
+				movie.setVideoCodec(VideoCodec.valueOf(mediaInfo.getVideoCodec().toUpperCase()));
+			} catch (IllegalArgumentException e) {
+				controller.setStatusLine("Unknown VideoCodec: [" + mediaInfo.getVideoCodec().toUpperCase() + "]");
+			}
+			try {
+				movie.setResolution(Resolution.valueOf("RESH" + mediaInfo.getFrameHeight()));
+			} catch (IllegalArgumentException eh) {
+				try {
+					movie.setResolution(Resolution.valueOf("RESW" + mediaInfo.getFrameWidth()));
+				} catch (IllegalArgumentException ew) {
+					controller.setStatusLine("Unknown Resolution: [RES" + mediaInfo.getFrameWidth() + "x" + mediaInfo.getFrameHeight() + "]");
+				}
+			}
+			try {
+				movie.setAudioCodec(AudioCodec.valueOf(mediaInfo.getAudioCodec().toUpperCase()));
+			} catch (IllegalArgumentException e) {
+				controller.setStatusLine("Unknown AudioCodec: [" + mediaInfo.getAudioCodec().toUpperCase() + "]");
+			}
+			try {
+				movie.setAudioChannels(AudioChannels.valueOf("CHANNELS" + mediaInfo.getAudioChannels()));
+			} catch (IllegalArgumentException e) {
+				controller.setStatusLine("Unknown AudioChannels: [CHANNELS" + mediaInfo.getAudioChannels() + "]");
+			}
+		} catch (Exception e) {
+			controller.setStatusLine(e.getLocalizedMessage());
+		}
+		
 	}
 	
 	private boolean writeSetValues(Movie movie) {
@@ -271,8 +327,8 @@ public class MovieService {
 	
 	private static String getFilePropsString(Movie movie) {
 		StringBuilder filepropsString = new StringBuilder();
-		appendFileProp(filepropsString, movie.getVideoCodec());
 		appendFileProp(filepropsString, movie.getContainer());
+		appendFileProp(filepropsString, movie.getVideoCodec());
 		appendFileProp(filepropsString, movie.getResolution());
 		appendFileProp(filepropsString, movie.getAudioCodec());
 		appendFileProp(filepropsString, movie.getAudioChannels());
@@ -294,7 +350,6 @@ public class MovieService {
 	}
 
 	public boolean writeFolderImage(Movie movie) {
-		File folderImageFile = new File("./generated/folder.jpg");
 		if (folderImageFile.exists() && folderImageFile.canWrite()) {
 			folderImageFile.delete();
 		}
@@ -342,7 +397,10 @@ public class MovieService {
 	}
 
 	public void writeXmlFile(Movie movie) {
-		File xmlFile = new File("generated/" + movie.getName() + ".xml");
+		File xmlFile = new File(movie.getFile().getParentFile(), movie.getName() + ".xml");
+		if (xmlFile.exists() && xmlFile.canWrite()) {
+			xmlFile.delete();
+		}
 		XmlMapper xmlMapper = new XmlMapper();
 		xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		xmlMapper.configure(Feature.WRITE_XML_DECLARATION, true );
@@ -351,6 +409,17 @@ public class MovieService {
 			xmlMapper.writeValue(xmlFile, details);
 		} catch (IOException e) {
 			controller.setStatusLine("Unable to write xml-file for movie: " + movie.toString());
+		}
+	}
+	
+	public void generateAndCopy(Movie movie) {
+		writeXmlFile(movie);
+		if (folderImageFile != null) {
+			try {
+				Files.copy(folderImageFile.toPath(), new File(movie.getFile().getParentFile(), "folder.jpg").toPath(), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				controller.setStatusLine("Unable to write folder-file for movie: " + movie.toString());
+			}
 		}
 	}
 

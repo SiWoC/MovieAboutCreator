@@ -124,9 +124,6 @@ public class Movie {
 			createDVD(_file);
 		} else {
 			setName(FilenameUtils.getBaseName(_file.getName()));
-			try {
-				setContainer(Container.valueOf(FilenameUtils.getExtension(_file.getName()).toUpperCase()));
-			} catch (IllegalArgumentException e) {}
 		}
 	}
 

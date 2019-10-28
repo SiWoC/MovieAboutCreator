@@ -59,7 +59,6 @@ public class MainController {
 	ChoiceBox<MovieInfoDetailsCollector> cbDetailsCollector;
 
 	private File htmlFile = new File ("generated/template.html");
-	private File aboutFile = new File ("generated/about.jpg");
 	private MovieService model;
 
 	public String getStatusLine() {
@@ -176,11 +175,12 @@ public class MainController {
 	ReloadListener reloadListener = new ReloadListener();
 
 	
-	public void generate(ActionEvent event) {
-		generate(htmlFile, aboutFile, 1280, 720);
+	public void generateAndCopy(ActionEvent event) {
 		Movie selectedMovie = lvMovies.getSelectionModel().getSelectedItem();
 		if (selectedMovie != null) {
-			model.writeXmlFile(selectedMovie);
+			File aboutFile = new File (selectedMovie.getFile().getParentFile(), "about.jpg");
+			generate(htmlFile, aboutFile, 1280, 720);
+			model.generateAndCopy(selectedMovie);
 		}
 	}
 		

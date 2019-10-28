@@ -6,6 +6,8 @@ public enum Container implements FileProp {
 	AVI("AVI","container_avi.png"),
 	DVD("DVD","container_dvd.png"),
 	ISO("ISO","container_iso.png"),
+	BRISO("BRISO","container_iso.png"),
+	DVDISO("DVDISO","container_iso.png"),
 	M2TS("M2TS","container_m2ts.png"),
 	MKV("MKV","container_mkv.png"),
 	MOV("MOV","container_mov.png"),

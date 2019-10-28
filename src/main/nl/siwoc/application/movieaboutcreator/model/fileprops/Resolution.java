@@ -2,15 +2,12 @@ package nl.siwoc.application.movieaboutcreator.model.fileprops;
 
 public enum Resolution implements FileProp {
 
-	ASF("ASF","container_asf.png"),
-	AVI("AVI","container_avi.png"),
-	DVD("DVD","container_dvd.png"),
-	ISO("ISO","container_iso.png"),
-	M2TS("M2TS","container_m2ts.png"),
-	MKV("MKV","container_mkv.png"),
-	MOV("MOV","container_mov.png"),
-	MP4("MP4","container_mp4.png"),
-	MPG("MPG","container_mpg.png");
+	RESH1080("RESH1080","output_1080p.png"),
+	RESW1920("RESW1920","output_1080p.png"),
+	RESH720("RESH720","output_720p.png"),
+	RESW1280("RESW1280","output_720p.png"),
+	RESH480("RESH480","output_ntsc.png"),
+	RESH576("RESH576","output_pal.png");
 	
 	private String name;
 	private String logo;

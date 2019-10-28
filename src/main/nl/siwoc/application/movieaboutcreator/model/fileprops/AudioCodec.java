@@ -2,15 +2,27 @@ package nl.siwoc.application.movieaboutcreator.model.fileprops;
 
 public enum AudioCodec implements FileProp {
 
-	ASF("ASF","container_asf.png"),
-	AVI("AVI","container_avi.png"),
-	DVD("DVD","container_dvd.png"),
-	ISO("ISO","container_iso.png"),
-	M2TS("M2TS","container_m2ts.png"),
-	MKV("MKV","container_mkv.png"),
-	MOV("MOV","container_mov.png"),
-	MP4("MP4","container_mp4.png"),
-	MPG("MPG","container_mpg.png");
+	AAC("AAC","audiocodec_aac.png"),
+	AC3("AC3","audiocodec_aac.png"),
+	DOLBY("DOLBY","audiocodec_dolby.png"),
+	DOLBY20("DOLBY20","audiocodec_dolby20.png"),
+	DOLBY30("DOLBY30","audiocodec_dolby30.png"),
+	DOLBY51("DOLBY51","audiocodec_dolby51.png"),
+	DTS("DTS","audiocodec_dts.png"),
+	DTSHD("DTSHD","audiocodec_dtshd.png"),
+	DTSHD51("DTSHD51","audiocodec_dtshd51.png"),
+	DTSHD61("DTSHD61","audiocodec_dtshd61.png"),
+	DTSHD71("DTSHD71","audiocodec_dtshd71.png"),
+	DTS_TEST("DTS_TEST","audiocodec_dts_test.png"),
+	FLAC("FLAC","audiocodec_flac.png"),
+	MP3("MP3","audiocodec_mp3.png"),
+	OGG("OGG","audiocodec_ogg.png"),
+	PCM("PCM","audiocodec_pcm.png"),
+	SOWT("SOWT","audiocodec_pcm.png"),
+	TRUEHD("TRUEHD","audiocodec_truehd.png"),
+	TRUEHD51("TRUEHD51","audiocodec_truehd51.png"),
+	TRUEHD61("TRUEHD61","audiocodec_truehd61.png"),
+	TRUEHD71("TRUEHD71","audiocodec_truehd71.png");
 	
 	private String name;
 	private String logo;

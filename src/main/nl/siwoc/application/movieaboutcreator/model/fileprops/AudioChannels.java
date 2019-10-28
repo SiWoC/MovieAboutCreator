@@ -2,15 +2,11 @@ package nl.siwoc.application.movieaboutcreator.model.fileprops;
 
 public enum AudioChannels implements FileProp {
 
-	ASF("ASF","container_asf.png"),
-	AVI("AVI","container_avi.png"),
-	DVD("DVD","container_dvd.png"),
-	ISO("ISO","container_iso.png"),
-	M2TS("M2TS","container_m2ts.png"),
-	MKV("MKV","container_mkv.png"),
-	MOV("MOV","container_mov.png"),
-	MP4("MP4","container_mp4.png"),
-	MPG("MPG","container_mpg.png");
+	CHANNELS2("Stereo","audiochannels_20.png"),
+	CHANNELS3("2.1 Stereo","audiochannels_21.png"),
+	CHANNELS6("5.1 Surround","audiochannels_51.png"),
+	CHANNELS7("6.1 Surround","audiochannels_61.png"),
+	CHANNELS8("7.1 Surround","audiochannels_71.png");
 	
 	private String name;
 	private String logo;
@@ -24,8 +20,8 @@ public enum AudioChannels implements FileProp {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String _name) {
+		this.name = _name;
 	}
 
 	public String getLogo() {
