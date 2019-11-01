@@ -1,7 +1,6 @@
 package nl.siwoc.application.movieaboutcreator.collector.themoviedb;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -29,7 +28,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 	final ObjectMapper mapper = new ObjectMapper();
 	
 	@Override
-	public boolean getDetails(Movie movie) {
+	public boolean getDetails(Movie movie) throws Exception {
 		String theMovieDbId = getTheMovieDbId(movie);
 		if (theMovieDbId != null) {
 			MovieDetails movieDetails = getDetailsFromApi(movie);
@@ -42,32 +41,32 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 	}
 
 	@Override
-	public byte[] getFolder(Movie movie) {
+	public byte[] getFolder(Movie movie) throws Exception {
 		byte[] image = null;
 		String theMovieDbId = getTheMovieDbId(movie);
 		if (theMovieDbId != null) {
 			MovieDetails movieDetails = getDetailsFromApi(movie);
 			if (movieDetails != null && movieDetails.getPoster_path() != null) {
-				image = getImage(Configuration.ImageBaseUrl + "w500" + movieDetails.getPoster_path());
+				image = getImageFromURL(Configuration.ImageBaseUrl + "w342" + movieDetails.getPoster_path());
 			}
 		}
 		return image;
 	}
 
 	@Override
-	public byte[] getBackground(Movie movie) {
+	public byte[] getBackground(Movie movie) throws Exception {
 		byte[] image = null;
 		String theMovieDbId = getTheMovieDbId(movie);
 		if (theMovieDbId != null) {
 			MovieDetails movieDetails = getDetailsFromApi(movie);
 			if (movieDetails != null && movieDetails.getBackdrop_path() != null) {
-				image = getImage(Configuration.ImageBaseUrl + "w1280" + movieDetails.getBackdrop_path());
+				image = getImageFromURL(Configuration.ImageBaseUrl + "w1280" + movieDetails.getBackdrop_path());
 			}
 		}
 		return image;
 	}
 	
-	private byte[] getImage(String imageUrl) {
+	private byte[] getImageFromURL(String imageUrl) throws Exception {
 		byte[] image = null;
 		if (imageUrl != null) {
 			HttpURLConnection conn = null;
@@ -79,14 +78,14 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				if (conn.getResponseCode() != 200) {
-					throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+					throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
 				}
 
 				InputStream is = conn.getInputStream();
 				image = IOUtils.toByteArray(is);
 
-			} catch (IOException e) {
-				throw new RuntimeException(e);
+			} catch (Exception e) {
+				throw e;
 			} finally {
 				conn.disconnect();
 			}
@@ -95,7 +94,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	}
 
-	private MovieDetails getDetailsFromApi(Movie movie) {
+	private MovieDetails getDetailsFromApi(Movie movie) throws Exception {
 		String theMovieDbId = movie.getId(Configuration.IdType);
 		MovieDetails movieDetails = null;
 		HttpURLConnection conn = null;
@@ -114,13 +113,13 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 				if (conn.getResponseCode() == 404) {
 					return movieDetails;
 				}
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+				throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
 			movieDetails = mapper.readValue(conn.getInputStream(), MovieDetails.class);
 			
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			throw e;
 		} finally {
 			conn.disconnect();
 		}
@@ -145,7 +144,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		movie.setActors(actors);
 	}
 
-	public String getTheMovieDbId(Movie movie)
+	public String getTheMovieDbId(Movie movie) throws Exception
 	{
 		String theMovieDbId = movie.getId(Configuration.IdType);
 		if (!StringUtils.isNumeric(theMovieDbId))
@@ -158,7 +157,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		return theMovieDbId;
 	}
 
-	public ArrayList<SearchMovieResult> searchMovie(Movie movie) {
+	public ArrayList<SearchMovieResult> searchMovie(Movie movie) throws Exception {
 		String query = createQuery(movie);
 		SearchMovieResponse searchMovieResponse = null;
 		ArrayList<SearchMovieResult> results = new ArrayList<SearchMovieResult>();
@@ -171,7 +170,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+				throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
 			searchMovieResponse = mapper.readValue(conn.getInputStream(), SearchMovieResponse.class);
@@ -179,8 +178,8 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 				results = searchMovieResponse.getResults();
 			}
 			
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			throw e;
 		} finally {
 			conn.disconnect();
 		}
@@ -252,7 +251,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		return false;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Movie movie; 
 		movie = new Movie(new File("Spiderman 3 (2007).avi"));
 		TheMovieDbMovieInfoCollector mic = new TheMovieDbMovieInfoCollector();
@@ -261,7 +260,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		movie = new Movie(new File("I Am Mother (2019).avi"));
 		mic.getFolder(movie);
 		System.out.println(" id " + mic.getTheMovieDbId(movie));
-		movie = new Movie(new File("Hotel Transylvania 3  Summer Vacation (2018).iso"));
+		movie = new Movie(new File("Wallace and Gromit - A Matter of Loaf and Death (2008)"));
 		System.out.println(" id " + mic.getTheMovieDbId(movie));
 		mic.getBackground(movie);
 		mic.getFolder(movie);

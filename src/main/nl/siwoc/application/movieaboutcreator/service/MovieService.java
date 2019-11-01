@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.logging.Logger;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -29,6 +31,7 @@ import nl.siwoc.application.movieaboutcreator.model.fileprops.Container;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.FileProp;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.Resolution;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.VideoCodec;
+import nl.siwoc.application.movieaboutcreator.utils.ImageUtils;
 import nl.siwoc.mediainfo.FileProber;
 import nl.siwoc.mediainfo.MediaInfo;
 import nl.siwoc.application.movieaboutcreator.model.MovieFileFilter;
@@ -36,6 +39,8 @@ import nl.siwoc.application.movieaboutcreator.model.XmlDetails;
 
 public class MovieService {
 
+	private static final Logger LOGGER = Logger.getLogger(MainController.class.getName());
+	
 	private String moviesFolderName = "";
 	private ObservableList<Movie> observableMoviesList = FXCollections.observableArrayList();
 	
@@ -53,10 +58,10 @@ public class MovieService {
 	private MainController controller;
 	private MovieInfoDetailsCollector detailsCollector;
 	private MovieInfoFolderCollector folderCollector;
-	private File folderImageFile = new File("./generated/folder.jpg");
 	private MovieInfoBackgroundCollector backgroundCollector;
 	private static FileProber fp;
 
+	// start/base of the setValues.js file
 	private static final String SET_VALUES_BASE = "function setText(id,newvalue) {\r\n" + 
 			"	var s= document.getElementById(id);\r\n" + 
 			"	if(typeof(s) != 'undefined' && s != null){\r\n" +
@@ -232,30 +237,28 @@ public class MovieService {
 	
 	private boolean writeSetValues(Movie movie) {
 		if (detailsCollector != null) {
-			detailsCollector.getDetails(movie);
-			File setValuesFile = new File("./generated/setvalues.js");
-			if (!setValuesFile.exists() || setValuesFile.canWrite()) {
-				try {
+			try {
+				detailsCollector.getDetails(movie);
+				if (!controller.getSetValuesFile().exists() || controller.getSetValuesFile().canWrite()) {
 					// start
-					FileUtils.writeStringToFile(setValuesFile, SET_VALUES_BASE, "UTF-8", false);
+					FileUtils.writeStringToFile(controller.getSetValuesFile(), SET_VALUES_BASE, "UTF-8", false);
 					// values
-					appendSetTextLine(setValuesFile, "title", movie.getTitle());
-					appendSetTextLine(setValuesFile, "year", movie.getYear());
-					appendSetTextLine(setValuesFile, "duration", getDurationString(movie.getDuration()));
-					appendSetTextLine(setValuesFile, "rating", getRatingString(movie.getRating()));
-					appendSetTextLine(setValuesFile, "plot", getPlotString(movie.getPlot()));
-					appendSetTextLine(setValuesFile, "directors", getDirectorsString(movie.getDirectors()));
-					appendSetTextLine(setValuesFile, "genres", getGenresString(movie.getGenres()));
-					appendSetTextLine(setValuesFile, "actors", getActorsString(movie.getActors()));
-					appendSetTextLine(setValuesFile, "fileprops", getFilePropsString(movie));
+					appendSetTextLine(controller.getSetValuesFile(), "title", movie.getTitle());
+					appendSetTextLine(controller.getSetValuesFile(), "year", movie.getYear());
+					appendSetTextLine(controller.getSetValuesFile(), "duration", getDurationString(movie.getDuration()));
+					appendSetTextLine(controller.getSetValuesFile(), "rating", getRatingString(movie.getRating()));
+					appendSetTextLine(controller.getSetValuesFile(), "plot", getPlotString(movie.getPlot()));
+					appendSetTextLine(controller.getSetValuesFile(), "directors", getDirectorsString(movie.getDirectors()));
+					appendSetTextLine(controller.getSetValuesFile(), "genres", getGenresString(movie.getGenres()));
+					appendSetTextLine(controller.getSetValuesFile(), "actors", getActorsString(movie.getActors()));
+					appendSetTextLine(controller.getSetValuesFile(), "fileprops", getFilePropsString(movie));
 					// end
-					FileUtils.writeStringToFile(setValuesFile, "}\r\n", "UTF-8", true);
+					FileUtils.writeStringToFile(controller.getSetValuesFile(), "}\r\n", "UTF-8", true);
 					controller.setStatusLine("Writen setvalues script for movie: " + movie.toString());
 					return true;
-				} catch (IOException e) {
-					controller.setStatusLine("IOException while writing setvalues script for movie: " + movie.toString());
-					throw new RuntimeException(e);
 				}
+			} catch (Exception e) {
+				controller.setStatusLine("Exception while writing setvalues script for movie: " + movie.toString(), e);
 			}
 		}
 		controller.setStatusLine("Unable to write setvalues script for movie: " + movie.toString());
@@ -346,22 +349,21 @@ public class MovieService {
 	}
 
 	public boolean writeFolderImage(Movie movie) {
-		if (folderImageFile.exists() && folderImageFile.canWrite()) {
-			folderImageFile.delete();
+		if (controller.getFolderImageFile().exists() && controller.getFolderImageFile().canWrite()) {
+			controller.getFolderImageFile().delete();
 		}
 		if (folderCollector != null) {
-			byte[] folderImage = folderCollector.getFolder(movie);
-			if (folderImage != null) {
-				if (!folderImageFile.exists() || folderImageFile.canWrite()) {
-					try {
-						FileUtils.writeByteArrayToFile(folderImageFile, folderImage);
+			try {
+				byte[] folderImage = folderCollector.getFolder(movie);
+				if (folderImage != null) {
+					if (!controller.getFolderImageFile().exists() || controller.getFolderImageFile().canWrite()) {
+						ImageUtils.writeByteArrayToJpgFile(folderImage, controller.getFolderImageFile());
 						controller.setStatusLine("Writen folder image for movie: " + movie.toString());
 						return true;
-					} catch (IOException e) {
-						controller.setStatusLine("IOException while writing folder image for movie: " + movie.toString());
-						throw new RuntimeException(e);
 					}
 				}
+			} catch (Exception e) {
+				controller.setStatusLine("Exception while writing folder image for movie: " + movie.toString(), e);
 			}
 		}
 		controller.setStatusLine("Unable to write folder image for movie: " + movie.toString());
@@ -369,29 +371,27 @@ public class MovieService {
 	}
 
 	public boolean writeBackgroundImage(Movie movie) {
-		File backgroundImageFile = new File("./generated/background.jpg");
-		if (backgroundImageFile.exists() && backgroundImageFile.canWrite()) {
-			backgroundImageFile.delete();
+		if (controller.getBackgroundImageFile().exists() && controller.getBackgroundImageFile().canWrite()) {
+			controller.getBackgroundImageFile().delete();
 		}
 		if (backgroundCollector != null) {
-			byte[] backgroundImage = backgroundCollector.getBackground(movie);
-			if (backgroundImage != null) {
-				if (!backgroundImageFile.exists() || backgroundImageFile.canWrite()) {
-					try {
-						FileUtils.writeByteArrayToFile(backgroundImageFile, backgroundImage);
+			try {
+				byte[] backgroundImage = backgroundCollector.getBackground(movie);
+				if (backgroundImage != null) {
+					if (!controller.getBackgroundImageFile().exists() || controller.getBackgroundImageFile().canWrite()) {
+						ImageUtils.writeByteArrayToJpgFile(backgroundImage, controller.getBackgroundImageFile());
 						controller.setStatusLine("Writen background image for movie: " + movie.toString());
 						return true;
-					} catch (IOException e) {
-						controller.setStatusLine("IOException while writing background image for movie: " + movie.toString());
-						throw new RuntimeException(e);
 					}
 				}
+			} catch (Exception e) {
+				controller.setStatusLine("Exception while writing background image for movie: " + movie.toString(), e);
 			}
 		}
 		controller.setStatusLine("Unable to write background image for movie: " + movie.toString());
 		return false;
 	}
-
+	
 	public void writeXmlFile(Movie movie) {
 		File xmlFile = new File(movie.getFile().getParentFile(), movie.getName() + ".xml");
 		if (xmlFile.exists() && xmlFile.canWrite()) {
@@ -404,17 +404,29 @@ public class MovieService {
 			XmlDetails details = new XmlDetails (movie);
 			xmlMapper.writeValue(xmlFile, details);
 		} catch (IOException e) {
-			controller.setStatusLine("Unable to write xml-file for movie: " + movie.toString());
+			controller.setStatusLine("Unable to write xml-file for movie: " + movie.toString(), e);
 		}
 	}
 	
 	public void generateAndCopy(Movie movie) {
 		writeXmlFile(movie);
-		if (folderImageFile != null) {
+		LOGGER.info("Copying folderImageFile with length: " + controller.getFolderImageFile().length());
+		if (controller.getFolderImageFile().length() > 0) {
 			try {
-				Files.copy(folderImageFile.toPath(), new File(movie.getFile().getParentFile(), "folder.jpg").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(controller.getFolderImageFile().toPath(), new File(movie.getFile().getParentFile(), "folder.jpg").toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
-				controller.setStatusLine("Unable to write folder-file for movie: " + movie.toString());
+				controller.setStatusLine("Unable to write folder-file for movie: " + movie.toString(), e);
+			}
+		}
+		LOGGER.info("Copying aboutImageFile with length: " + controller.getAboutImageFile().length());
+		if (controller.getAboutImageFile().length() > 0) {
+			try {
+				// We leave this a png with jpg extension
+				// Mede8er can read the png just fine and quality is better than the jpg
+				Files.copy(controller.getAboutImageFile().toPath(), new File(movie.getFile().getParentFile(), "about.jpg").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				//ImageUtils.convertToJpg(controller.getAboutImageFile(), new File(movie.getFile().getParentFile(), "about.jpg"));
+			} catch (Exception e) {
+				controller.setStatusLine("Unable to write about-file for movie: " + movie.toString(), e);
 			}
 		}
 	}

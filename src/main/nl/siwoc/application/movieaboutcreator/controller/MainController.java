@@ -2,6 +2,9 @@ package nl.siwoc.application.movieaboutcreator.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
 
 import javafx.animation.PauseTransition;
@@ -31,6 +34,14 @@ import nl.siwoc.application.movieaboutcreator.service.MovieService;
 
 public class MainController {
 
+	private static final Logger LOGGER = Logger.getLogger(MainController.class.getName());
+	
+	private File htmlFile = new File ("generated/template.html");
+	private File folderImageFile = new File("generated/folder.jpg");
+	private File backgroundImageFile = new File("generated/background.jpg");
+	private File aboutImageFile = new File("generated/about.png");
+	private File setValuesFile = new File("generated/setvalues.js");
+
 	@FXML
 	AnchorPane rootPane;
 
@@ -58,16 +69,55 @@ public class MainController {
 	@FXML
 	ChoiceBox<MovieInfoDetailsCollector> cbDetailsCollector;
 
-	private File htmlFile = new File ("generated/template.html");
 	private MovieService model;
+
+	public File getFolderImageFile() {
+		return folderImageFile;
+	}
+
+	public void setFolderImageFile(File folderImageFile) {
+		this.folderImageFile = folderImageFile;
+	}
+
+	public File getBackgroundImageFile() {
+		return backgroundImageFile;
+	}
+
+	public void setBackgroundImageFile(File backgroundImageFile) {
+		this.backgroundImageFile = backgroundImageFile;
+	}
+
+	public File getAboutImageFile() {
+		return aboutImageFile;
+	}
+
+	public void setAboutImageFile(File aboutImageFile) {
+		this.aboutImageFile = aboutImageFile;
+	}
+
+	public File getSetValuesFile() {
+		return setValuesFile;
+	}
+
+	public void setSetValuesFile(File setValuesFile) {
+		this.setValuesFile = setValuesFile;
+	}
 
 	public String getStatusLine() {
 		return txtStatusArea.getText();
 	}
 
 	public void setStatusLine(String statusLineText) {
+		setStatusLine(statusLineText, null);
+	}
+	
+	public void setStatusLine(String statusLineText, Throwable e) {
 		if (txtStatusArea != null) {
+			LOGGER.info(statusLineText);
 			txtStatusArea.setText(statusLineText + "\r\n" + txtStatusArea.getText().substring(0, Math.min(txtStatusArea.getLength(), 2000)));
+		}
+		if (e != null) {
+			LOGGER.log(Level.SEVERE, statusLineText, e);
 		}
 	}
 
@@ -178,13 +228,12 @@ public class MainController {
 	public void generateAndCopy(ActionEvent event) {
 		Movie selectedMovie = lvMovies.getSelectionModel().getSelectedItem();
 		if (selectedMovie != null) {
-			File aboutFile = new File (selectedMovie.getFile().getParentFile(), "about.jpg");
-			generate(htmlFile, aboutFile, 1280, 720);
-			model.generateAndCopy(selectedMovie);
+			//File aboutFile = new File (selectedMovie.getFile().getParentFile(), "about.jpg");
+			generateAndCopy(selectedMovie, htmlFile, aboutImageFile, 1280, 720);
 		}
 	}
 		
-	public void generate(File htmlFile, File outputFile, double width, double height) {
+	public void generateAndCopy(Movie selectedMovie, File htmlFile, File outputFile, double width, double height) {
 		// rootPane is the root of original scene in an FXML controller you get this when you assign it an id
 		rootPane.setEffect(new GaussianBlur());
 		Stage primaryStage = (Stage)rootPane.getScene().getWindow();
@@ -210,6 +259,8 @@ public class MainController {
 				String format = "png";
 				try {
 					ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, outputFile);
+					LOGGER.info("Generated aboutImageFile with length: " + outputFile.length());
+					model.generateAndCopy(selectedMovie);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

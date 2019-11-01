@@ -4,7 +4,7 @@ import nl.siwoc.application.movieaboutcreator.model.Movie;
 
 public interface MovieInfoBackgroundCollector {
 	
-	public byte[] getBackground(Movie movie);
+	public byte[] getBackground(Movie movie) throws Exception;
 
 	public String getName();
 

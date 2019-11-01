@@ -15,7 +15,7 @@ class TheMovieDbTests {
 	TheMovieDbMovieInfoCollector mic = new TheMovieDbMovieInfoCollector();
 	
 	@Test
-	void testGetTheMovieDbId() {
+	void testGetTheMovieDbId() throws Exception {
 		movie = new Movie(new File("Soof (2013).avi"));
 		assertEquals("230217", mic.getTheMovieDbId(movie), "Wrong id found");
 		movie = new Movie(new File("Brave (2012).avi"));

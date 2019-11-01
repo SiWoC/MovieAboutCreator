@@ -15,7 +15,7 @@ class MoviemeterTests {
 	MoviemeterMovieInfoCollector mic = new MoviemeterMovieInfoCollector();
 	
 	@Test
-	void testGetMoviemeterId() {
+	void testGetMoviemeterId() throws Exception {
 		movie = new Movie(new File("Soof (2013).avi"));
 		assertEquals("90303", mic.getMoviemeterId(movie), "Wrong id found");
 		movie = new Movie(new File("Brave (2012).avi"));

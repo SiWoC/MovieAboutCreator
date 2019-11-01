@@ -1,7 +1,6 @@
 package nl.siwoc.application.movieaboutcreator.collector.moviemeter;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -26,7 +25,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 	final ObjectMapper mapper = new ObjectMapper();
 	
 	@Override
-	public boolean getDetails(Movie movie) {
+	public boolean getDetails(Movie movie) throws Exception {
 		String moviemeterId = getMoviemeterId(movie);
 		if (moviemeterId != null) {
 			MovieDetails movieDetails = getDetailsFromApi(movie);
@@ -39,7 +38,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 	}
 
 	@Override
-	public byte[] getFolder(Movie movie) {
+	public byte[] getFolder(Movie movie) throws Exception {
 		String moviemeterId = getMoviemeterId(movie);
 		byte[] image = null;
 		if (moviemeterId != null) {
@@ -60,14 +59,14 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 						if (conn.getResponseCode() == 404) {
 							return result;
 						}
-						throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+						throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
 					}
 					
 					InputStream is = conn.getInputStream();
 					image = IOUtils.toByteArray(is);
 					
-				} catch (IOException e) {
-					throw new RuntimeException(e);
+				} catch (Exception e) {
+					throw e;
 				} finally {
 					if (conn != null) {
 						conn.disconnect();
@@ -78,7 +77,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		return image;
 	}
 
-	private MovieDetails getDetailsFromApi(Movie movie) {
+	private MovieDetails getDetailsFromApi(Movie movie) throws Exception {
 		String moviemeterId = movie.getId(Configuration.IdType);
 		MovieDetails movieDetails = null;
 		HttpURLConnection conn = null;
@@ -97,13 +96,13 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 				if (conn.getResponseCode() == 404) {
 					return movieDetails;
 				}
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+				throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
 			movieDetails = mapper.readValue(conn.getInputStream(), MovieDetails.class);
 			
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			throw e;
 		} finally {
 			if (conn != null) {
 				conn.disconnect();
@@ -127,7 +126,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 	}
 
 
-	public String getMoviemeterId(Movie movie)
+	public String getMoviemeterId(Movie movie) throws Exception
 	{
 		String moviemeterId = movie.getId(Configuration.IdType);
 		if (!StringUtils.isNumeric(moviemeterId))
@@ -140,7 +139,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		return moviemeterId;
 	}
 
-	public ArrayList<SearchMovieResult> searchMovie(Movie movie) {
+	public ArrayList<SearchMovieResult> searchMovie(Movie movie) throws Exception {
 		String query = createQuery(movie);
 		ArrayList<SearchMovieResult> result = new ArrayList<SearchMovieResult>();
 		HttpURLConnection conn = null;
@@ -155,13 +154,13 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 				if (conn.getResponseCode() == 404) {
 					return result;
 				}
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+				throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
 			result = new ArrayList<SearchMovieResult>(Arrays.asList(mapper.readValue(conn.getInputStream(), SearchMovieResult[].class)));
 			
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			throw e;
 		} finally {
 			if (conn != null) {
 				conn.disconnect();
@@ -230,7 +229,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		return false;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Movie movie; 
 		//MediaMetadataRetriever mmr = new MediaMetadataRetriever();
 		//mmr.setDataSource("O:\\Series\\Red Dwarf\\S01\\Red Dwarf S01E01 - The End.avi");
