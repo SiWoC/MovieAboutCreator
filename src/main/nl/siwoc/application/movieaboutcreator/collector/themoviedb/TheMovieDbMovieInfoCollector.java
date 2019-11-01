@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Niek Knijnenburg
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *******************************************************************************/
 package nl.siwoc.application.movieaboutcreator.collector.themoviedb;
 
 import java.io.File;
@@ -7,6 +23,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,6 +42,8 @@ import nl.siwoc.application.movieaboutcreator.model.Movie;
 import nl.siwoc.application.movieaboutcreator.model.Movie.Actor;
 
 public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,MovieInfoFolderCollector,MovieInfoBackgroundCollector {
+
+	private static final Logger LOGGER = Logger.getLogger(TheMovieDbMovieInfoCollector.class.getName());
 
 	final ObjectMapper mapper = new ObjectMapper();
 	
@@ -74,7 +94,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 			// call image api
 			try {
 				URL url = new URL(imageUrl);
-				System.out.println("HTTP imageUrl call: " + url);
+				LOGGER.finer("HTTP imageUrl call: " + url);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				if (conn.getResponseCode() != 200) {
@@ -106,7 +126,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call movie api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "movie/" + theMovieDbId + "?api_key=" + Configuration.ApiKey + "&language=en-US&append_to_response=credits");
-			System.out.println("HTTP details call: " + url);
+			LOGGER.finer("HTTP details call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
@@ -166,7 +186,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call search movie api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "search/movie?api_key=" + Configuration.ApiKey + "&include_adult=false&query=" + query);
-			System.out.println("HTTP search call: " + url);
+			LOGGER.finer("HTTP search call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {

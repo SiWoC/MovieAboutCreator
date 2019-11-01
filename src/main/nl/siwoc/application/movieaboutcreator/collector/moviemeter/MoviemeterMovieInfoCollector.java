@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Niek Knijnenburg
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *******************************************************************************/
 package nl.siwoc.application.movieaboutcreator.collector.moviemeter;
 
 import java.io.File;
@@ -8,6 +24,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +39,7 @@ import nl.siwoc.application.movieaboutcreator.model.Movie;
 
 public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,MovieInfoFolderCollector {
 
+	private static final Logger LOGGER = Logger.getLogger(MoviemeterMovieInfoCollector.class.getName());
 	final ObjectMapper mapper = new ObjectMapper();
 	
 	@Override
@@ -45,14 +63,14 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 			MovieDetails movieDetails = getDetailsFromApi(movie);
 			if (movieDetails != null && movieDetails.getPosters() != null && movieDetails.getPosters().getRegular() != null) {
 				String folderURL = movieDetails.getPosters().getRegular();
-				System.out.println("folder: " + folderURL);
+				LOGGER.finer("folder: " + folderURL);
 				byte[] result = null;
 				HttpURLConnection conn = null;
 				
 				// call moviemeter api
 				try {
 					URL url = new URL(folderURL);
-					System.out.println("HTTP folderImage call: " + url);
+					LOGGER.finer("HTTP folderImage call: " + url);
 					conn = (HttpURLConnection) url.openConnection();
 					conn.setRequestMethod("GET");
 					if (conn.getResponseCode() != 200) {
@@ -89,7 +107,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call moviemeter api
 		try {
 			URL url = new URL(Configuration.BaseUrl + moviemeterId + "?api_key=" + Configuration.ApiKey);
-			System.out.println("HTTP details call: " + url);
+			LOGGER.finer("HTTP details call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
@@ -147,7 +165,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call moviemeter api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "?q=" + query + "&api_key=" + Configuration.ApiKey);
-			System.out.println("HTTP search call: " + url);
+			LOGGER.finer("HTTP search call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {

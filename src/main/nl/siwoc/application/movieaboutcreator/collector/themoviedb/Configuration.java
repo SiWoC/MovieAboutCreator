@@ -1,8 +1,25 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Niek Knijnenburg
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *******************************************************************************/
 package nl.siwoc.application.movieaboutcreator.collector.themoviedb;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,6 +27,8 @@ import nl.siwoc.application.movieaboutcreator.Properties;
 import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.GetConfigurationResponse;
 
 public class Configuration {
+
+	private static final Logger LOGGER = Logger.getLogger(Configuration.class.getName());
 
 	public static final String IdType = "themoviedb";
 	public static String ApiKey = Properties.getProperty("themoviedb.apikey");
@@ -26,7 +45,7 @@ public class Configuration {
 		// call themoviedb configuration api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "configuration?api_key=" + Configuration.ApiKey);
-			System.out.println("HTTP configuration call: " + url);
+			LOGGER.finer("HTTP configuration call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
