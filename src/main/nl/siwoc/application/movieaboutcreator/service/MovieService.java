@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
@@ -56,6 +57,7 @@ import nl.siwoc.application.movieaboutcreator.model.XmlDetails;
 public class MovieService {
 
 	private static final Logger LOGGER = Logger.getLogger(MainController.class.getName());
+	private Comparator<Movie> comparator = Comparator.comparing(Movie::toString); 
 	
 	private String moviesFolderName = "";
 	private ObservableList<Movie> observableMoviesList = FXCollections.observableArrayList();
@@ -180,6 +182,7 @@ public class MovieService {
 					}
 				}
 			}
+			FXCollections.sort(observableMoviesList, comparator);
 		} else {
 			controller.setStatusLine("[" + moviesFolderName + "] is not a folder");
 		}
