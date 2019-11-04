@@ -32,6 +32,7 @@ public enum AudioCodec implements FileProp {
 	DTS_TEST("DTS_TEST","audiocodec_dts_test.png"),
 	FLAC("FLAC","audiocodec_flac.png"),
 	MP3("MP3","audiocodec_mp3.png"),
+	MP4A("MP4A","audiocodec_mp3.png"),
 	OGG("OGG","audiocodec_ogg.png"),
 	PCM("PCM","audiocodec_pcm.png"),
 	SOWT("SOWT","audiocodec_pcm.png"),

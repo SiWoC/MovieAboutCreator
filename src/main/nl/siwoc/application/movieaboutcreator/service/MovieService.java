@@ -235,7 +235,11 @@ public class MovieService {
 				try {
 					movie.setResolution(Resolution.valueOf("RESW" + mediaInfo.getFrameWidth()));
 				} catch (IllegalArgumentException ew) {
-					controller.setStatusLine("Unknown Resolution: [RES" + mediaInfo.getFrameWidth() + "x" + mediaInfo.getFrameHeight() + "]");
+					if (mediaInfo.getFrameWidth() >= 640 && mediaInfo.getFrameWidth() <= 720) {
+						movie.setResolution(Resolution.PAL);
+					} else {
+						controller.setStatusLine("Unknown Resolution: [RES" + mediaInfo.getFrameWidth() + "x" + mediaInfo.getFrameHeight() + "]");
+					}
 				}
 			}
 			try {

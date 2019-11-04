@@ -20,10 +20,13 @@ public enum Resolution implements FileProp {
 
 	RESH1080("RESH1080","output_1080p.png"),
 	RESW1920("RESW1920","output_1080p.png"),
+	RESW1916("RESW1916","output_1080p.png"),
 	RESH720("RESH720","output_720p.png"),
 	RESW1280("RESW1280","output_720p.png"),
 	RESH480("RESH480","output_ntsc.png"),
-	RESH576("RESH576","output_pal.png");
+	RESH576("RESH576","output_pal.png"),
+	RESW720("RESW720","output_pal.png"),
+	PAL("PAL","output_pal.png");
 	
 	private String name;
 	private String logo;

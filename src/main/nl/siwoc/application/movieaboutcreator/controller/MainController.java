@@ -37,6 +37,7 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -198,6 +199,18 @@ public class MainController {
 	}
 
 	public void browseMoviesFolder(ActionEvent event) {
+		DirectoryChooser folderChooser = new DirectoryChooser();
+		folderChooser.setInitialDirectory(new File(txtMoviesFolderName.getText()));
+		folderChooser.setTitle("Where are your movies stored?");
+		File selectedFolder = folderChooser.showDialog((Stage)rootPane.getScene().getWindow());
+		if (selectedFolder != null) {
+			try {
+				txtMoviesFolderName.setText(selectedFolder.getCanonicalPath());
+			} catch (IOException e) {
+				// ???
+			}
+			refreshMovies(event);
+		}
 	}
 
 	public void refreshMovies(ActionEvent event) {

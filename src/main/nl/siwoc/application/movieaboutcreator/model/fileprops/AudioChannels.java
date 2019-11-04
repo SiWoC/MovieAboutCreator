@@ -20,6 +20,7 @@ public enum AudioChannels implements FileProp {
 
 	CHANNELS2("Stereo","audiochannels_20.png"),
 	CHANNELS3("2.1 Stereo","audiochannels_21.png"),
+	CHANNELS5("4.1 Stereo","audiochannels_51.png"),
 	CHANNELS6("5.1 Surround","audiochannels_51.png"),
 	CHANNELS7("6.1 Surround","audiochannels_61.png"),
 	CHANNELS8("7.1 Surround","audiochannels_71.png");

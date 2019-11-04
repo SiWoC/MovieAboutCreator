@@ -16,7 +16,7 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="683.0" prefWidth="1255.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.siwoc.application.movieaboutcreator.controller.MainController">
    <children>
-      <SplitPane dividerPositions="0.3" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <SplitPane dividerPositions="0.3" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <items>
           <AnchorPane>
                <children>
@@ -25,8 +25,8 @@
                         <Insets bottom="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <Button fx:id="btnBrowseMoviesFolder" mnemonicParsing="false" onAction="#browseMoviesFolder" text="Browse..." textOverrun="CLIP" AnchorPane.rightAnchor="41.0" AnchorPane.topAnchor="0.0" />
-                  <TextField fx:id="txtMoviesFolderName" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="36.0" />
+                  <Button fx:id="btnBrowseMoviesFolder" mnemonicParsing="false" onAction="#browseMoviesFolder" prefHeight="31.0" text="Browse..." textOverrun="CLIP" AnchorPane.rightAnchor="41.0" AnchorPane.topAnchor="0.0" />
+                  <TextField fx:id="txtMoviesFolderName" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="36.0" onAction="#refreshMovies" />
                   <ListView fx:id="lvMovies" layoutY="77.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="74.0" />
                   <Button fx:id="btnRefreshMovies" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refreshMovies" prefHeight="31.0" prefWidth="31.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
                      <tooltip>
@@ -56,6 +56,6 @@
                </children></AnchorPane>
         </items>
       </SplitPane>
-      <TextArea fx:id="txtStatusArea" editable="false" prefHeight="31.0" scrollTop="22.0" wrapText="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+      <TextArea fx:id="txtStatusArea" editable="false" prefHeight="66.0" prefWidth="1235.0" scrollTop="22.0" wrapText="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
    </children>
 </AnchorPane>
