@@ -20,6 +20,7 @@ public enum AudioCodec implements FileProp {
 
 	AAC("AAC","audiocodec_aac.png"),
 	AC3("AC3","audiocodec_aac.png"),
+	EAC3("EAC3","audiocodec_aac.png"),
 	DOLBY("DOLBY","audiocodec_dolby.png"),
 	DOLBY20("DOLBY20","audiocodec_dolby20.png"),
 	DOLBY30("DOLBY30","audiocodec_dolby30.png"),

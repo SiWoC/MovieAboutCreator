@@ -18,15 +18,10 @@ package nl.siwoc.application.movieaboutcreator.model.fileprops;
 
 public enum Resolution implements FileProp {
 
-	RESH1080("RESH1080","output_1080p.png"),
-	RESW1920("RESW1920","output_1080p.png"),
-	RESW1916("RESW1916","output_1080p.png"),
-	RESH720("RESH720","output_720p.png"),
-	RESW1280("RESW1280","output_720p.png"),
-	RESH480("RESH480","output_ntsc.png"),
-	RESH576("RESH576","output_pal.png"),
-	RESW720("RESW720","output_pal.png"),
-	PAL("PAL","output_pal.png");
+	RES1080("RES1080","output_1080p.png"),
+	RES720("RES720","output_720p.png"),
+	PAL("PAL","output_pal.png"),
+	NTSC("NTSC","output_ntsc.png");
 	
 	private String name;
 	private String logo;
@@ -50,6 +45,19 @@ public enum Resolution implements FileProp {
 
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+	
+	public static Resolution getResolution(int width, int height) throws Exception {
+		if (height > 720 || width > 1280) {
+			return RES1080;
+		} else if (height > 576 || width > 720) {
+			return RES720;
+		} else if (height > 480) {
+			return PAL;
+		} else if (width > 640) {
+			return NTSC;
+		}
+		throw new Exception("Unknown Resolution: [RES" + width + "x" + height + "]");
 	}
 
 }

@@ -230,20 +230,12 @@ public class MovieService {
 				controller.setStatusLine("Unknown VideoCodec: [" + mediaInfo.getVideoCodec().toUpperCase() + "]");
 			}
 			try {
-				movie.setResolution(Resolution.valueOf("RESH" + mediaInfo.getFrameHeight()));
-			} catch (IllegalArgumentException eh) {
-				try {
-					movie.setResolution(Resolution.valueOf("RESW" + mediaInfo.getFrameWidth()));
-				} catch (IllegalArgumentException ew) {
-					if (mediaInfo.getFrameWidth() >= 640 && mediaInfo.getFrameWidth() <= 720) {
-						movie.setResolution(Resolution.PAL);
-					} else {
-						controller.setStatusLine("Unknown Resolution: [RES" + mediaInfo.getFrameWidth() + "x" + mediaInfo.getFrameHeight() + "]");
-					}
-				}
+				movie.setResolution(Resolution.getResolution(mediaInfo.getFrameWidth(), mediaInfo.getFrameHeight()));
+			} catch (IllegalArgumentException ew) {
+				controller.setStatusLine("Unknown Resolution: [RES" + mediaInfo.getFrameWidth() + "x" + mediaInfo.getFrameHeight() + "]");
 			}
 			try {
-				movie.setAudioCodec(AudioCodec.valueOf(mediaInfo.getAudioCodec().toUpperCase()));
+				movie.setAudioCodec(AudioCodec.valueOf(mediaInfo.getAudioCodec().toUpperCase().trim()));
 			} catch (IllegalArgumentException e) {
 				controller.setStatusLine("Unknown AudioCodec: [" + mediaInfo.getAudioCodec().toUpperCase() + "]");
 			}
