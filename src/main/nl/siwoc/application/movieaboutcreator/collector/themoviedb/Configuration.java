@@ -19,16 +19,14 @@ package nl.siwoc.application.movieaboutcreator.collector.themoviedb;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.logging.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import nl.siwoc.application.movieaboutcreator.Properties;
 import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.GetConfigurationResponse;
+import nl.siwoc.application.movieaboutcreator.utils.Properties;
+import nl.siwoc.application.movieaboutcreator.utils.Logger;
 
 public class Configuration {
-
-	private static final Logger LOGGER = Logger.getLogger(Configuration.class.getName());
 
 	public static final String IdType = "themoviedb";
 	public static String ApiKey = Properties.getProperty("themoviedb.apikey");
@@ -45,7 +43,7 @@ public class Configuration {
 		// call themoviedb configuration api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "configuration?api_key=" + Configuration.ApiKey);
-			LOGGER.finer("HTTP configuration call: " + url);
+			Logger.logTrace("HTTP configuration call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {

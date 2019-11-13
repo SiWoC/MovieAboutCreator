@@ -23,7 +23,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,10 +39,9 @@ import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.SearchM
 import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.SearchMovieResult;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
 import nl.siwoc.application.movieaboutcreator.model.Movie.Actor;
+import nl.siwoc.application.movieaboutcreator.utils.Logger;
 
 public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,MovieInfoFolderCollector,MovieInfoBackgroundCollector {
-
-	private static final Logger LOGGER = Logger.getLogger(TheMovieDbMovieInfoCollector.class.getName());
 
 	final ObjectMapper mapper = new ObjectMapper();
 	
@@ -94,7 +92,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 			// call image api
 			try {
 				URL url = new URL(imageUrl);
-				LOGGER.finer("HTTP imageUrl call: " + url);
+				Logger.logTrace("HTTP imageUrl call: " + url);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				if (conn.getResponseCode() != 200) {
@@ -126,7 +124,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call movie api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "movie/" + theMovieDbId + "?api_key=" + Configuration.ApiKey + "&language=en-US&append_to_response=credits");
-			LOGGER.finer("HTTP details call: " + url);
+			Logger.logTrace("HTTP details call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
@@ -186,7 +184,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call search movie api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "search/movie?api_key=" + Configuration.ApiKey + "&include_adult=false&query=" + query);
-			LOGGER.finer("HTTP search call: " + url);
+			Logger.logTrace("HTTP search call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {

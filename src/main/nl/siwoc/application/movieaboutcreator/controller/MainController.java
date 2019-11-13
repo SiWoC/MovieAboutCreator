@@ -18,8 +18,6 @@ package nl.siwoc.application.movieaboutcreator.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -42,17 +40,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import nl.siwoc.application.movieaboutcreator.Properties;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoBackgroundCollector;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoDetailsCollector;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoFolderCollector;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
 import nl.siwoc.application.movieaboutcreator.service.MovieService;
+import nl.siwoc.application.movieaboutcreator.utils.Properties;
+import nl.siwoc.application.movieaboutcreator.utils.Logger;
 
 public class MainController {
 
-	private static final Logger LOGGER = Logger.getLogger(MainController.class.getName());
-	
 	private File htmlFile = new File ("generated/template.html");
 	private File folderImageFile = new File("generated/folder.jpg");
 	private File backgroundImageFile = new File("generated/background.jpg");
@@ -130,11 +127,11 @@ public class MainController {
 	
 	public void setStatusLine(String statusLineText, Throwable e) {
 		if (txtStatusArea != null) {
-			LOGGER.info(statusLineText);
+			Logger.logInfo(statusLineText);
 			txtStatusArea.setText(statusLineText + "\r\n" + txtStatusArea.getText().substring(0, Math.min(txtStatusArea.getLength(), 2000)));
 		}
 		if (e != null) {
-			LOGGER.log(Level.SEVERE, statusLineText, e);
+			Logger.logError(statusLineText, e);
 		}
 	}
 
@@ -288,7 +285,7 @@ public class MainController {
 				String format = "png";
 				try {
 					ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, outputFile);
-					LOGGER.info("Generated aboutImageFile with length: " + outputFile.length());
+					Logger.logInfo("Generated aboutImageFile with length: " + outputFile.length());
 					model.generateAndCopy(selectedMovie);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

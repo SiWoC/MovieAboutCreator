@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
-import nl.siwoc.application.movieaboutcreator.Properties;
+import nl.siwoc.application.movieaboutcreator.utils.Properties;
 
 public class MovieFileFilter implements FileFilter {
 

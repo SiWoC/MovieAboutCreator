@@ -16,7 +16,7 @@
  *******************************************************************************/
 package nl.siwoc.application.movieaboutcreator.collector.moviemeter;
 
-import nl.siwoc.application.movieaboutcreator.Properties;
+import nl.siwoc.application.movieaboutcreator.utils.Properties;
 
 public class Configuration {
 

@@ -14,24 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
-package nl.siwoc.application.movieaboutcreator;
+package nl.siwoc.application.movieaboutcreator.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.logging.Logger;
 
 public class Properties {
 
-	private static final Logger LOGGER = Logger.getLogger(Properties.class.getName());
 	private static java.util.Properties mainProperties = new java.util.Properties();
-	
+
 	static {
-		 try (FileInputStream is = new FileInputStream("movieaboutcreator.properties")) {
-			 mainProperties.load(new InputStreamReader(is, Charset.forName("UTF-8")));
-		 } catch (IOException e) {
-			LOGGER.severe("Could not load properties file");
+		try (FileInputStream is = new FileInputStream("movieaboutcreator.properties")) {
+			mainProperties.load(new InputStreamReader(is, Charset.forName("UTF-8")));
+		} catch (IOException e) {
+			throw new RuntimeException("Could not load properties file",e);
 		}
 	}
 

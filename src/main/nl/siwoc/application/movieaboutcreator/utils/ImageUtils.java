@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.logging.Logger;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -43,8 +42,6 @@ import javax.imageio.stream.FileImageOutputStream;
 import org.apache.commons.io.IOUtils;
 
 public class ImageUtils {
-
-	private static final Logger LOGGER = Logger.getLogger(ImageUtils.class.getName());
 
 	// for TheMovieDB image conversion
 	private static final int[] RGB_MASKS = {0xFF0000, 0xFF00, 0xFF};
@@ -115,7 +112,7 @@ public class ImageUtils {
 			// call image api
 			try {
 				URL url = new URL(imageUrl);
-				LOGGER.finer("HTTP imageUrl call: " + url);
+				Logger.logTrace("HTTP imageUrl call: " + url);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				if (conn.getResponseCode() != 200) {

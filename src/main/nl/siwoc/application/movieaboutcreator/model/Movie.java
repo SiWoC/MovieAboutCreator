@@ -194,6 +194,21 @@ public class Movie {
 		} else {
 			setTitle(_name);
 		}
+		// trying to get the id from the name
+		int idStart = _name.lastIndexOf('[');
+		if (idStart > 0) {
+			int idEnd = _name.lastIndexOf(']');
+			String[] idParts = _name.substring(idStart + 1,idEnd).split(" ");
+			if (idParts.length == 2) {
+				setId(idParts[0], idParts[1]);
+			} else if (idParts.length > 2) {
+				if ("ID".equalsIgnoreCase(idParts[0])) {
+					setId(idParts[1], idParts[2]);
+				} else {
+					setId(idParts[0], idParts[1]);
+				}
+			}
+		}
 	}
 	
 	public String getPlot() {
@@ -249,7 +264,7 @@ public class Movie {
 	}
 
 	public void setId(String idType, String id) {
-		ids.put(idType,id);
+		ids.put(idType.toLowerCase(), id);
 	}
 	
 	public void setContainer(Container _container) {
@@ -297,10 +312,11 @@ public class Movie {
 	}
 	
 	public static void main (String[] args) {
-		File f = new File("O:\\downloads\\Aladdin (1992)\\Aladdin (1992).iso");
+		File f = new File("O:/Films/Winter's Tale (2014)/Winter's Tale 2014 [ID moviemeter 97163].mkv");
 		Movie movie = new Movie(f);
+		System.out.println(movie.getTitle());
 		System.out.println(movie.getYear());
-		System.out.println(movie.getContainer().getLogo());
+		System.out.println(movie.ids);
 	}
 
 }

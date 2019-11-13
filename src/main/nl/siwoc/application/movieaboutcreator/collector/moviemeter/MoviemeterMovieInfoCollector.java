@@ -24,7 +24,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,10 +35,10 @@ import nl.siwoc.application.movieaboutcreator.collector.MovieInfoDetailsCollecto
 import nl.siwoc.application.movieaboutcreator.collector.moviemeter.model.MovieDetails;
 import nl.siwoc.application.movieaboutcreator.collector.moviemeter.model.SearchMovieResult;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
+import nl.siwoc.application.movieaboutcreator.utils.Logger;
 
 public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,MovieInfoFolderCollector {
 
-	private static final Logger LOGGER = Logger.getLogger(MoviemeterMovieInfoCollector.class.getName());
 	final ObjectMapper mapper = new ObjectMapper();
 	
 	@Override
@@ -63,14 +62,14 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 			MovieDetails movieDetails = getDetailsFromApi(movie);
 			if (movieDetails != null && movieDetails.getPosters() != null && movieDetails.getPosters().getRegular() != null) {
 				String folderURL = movieDetails.getPosters().getRegular();
-				LOGGER.finer("folder: " + folderURL);
+				Logger.logTrace("folder: " + folderURL);
 				byte[] result = null;
 				HttpURLConnection conn = null;
 				
 				// call moviemeter api
 				try {
 					URL url = new URL(folderURL);
-					LOGGER.finer("HTTP folderImage call: " + url);
+					Logger.logTrace("HTTP folderImage call: " + url);
 					conn = (HttpURLConnection) url.openConnection();
 					conn.setRequestMethod("GET");
 					if (conn.getResponseCode() != 200) {
@@ -107,7 +106,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call moviemeter api
 		try {
 			URL url = new URL(Configuration.BaseUrl + moviemeterId + "?api_key=" + Configuration.ApiKey);
-			LOGGER.finer("HTTP details call: " + url);
+			Logger.logTrace("HTTP details call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
@@ -165,7 +164,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call moviemeter api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "?q=" + query + "&api_key=" + Configuration.ApiKey);
-			LOGGER.finer("HTTP search call: " + url);
+			Logger.logTrace("HTTP search call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
@@ -249,8 +248,6 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	public static void main(String[] args) throws Exception {
 		Movie movie; 
-		//MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-		//mmr.setDataSource("O:\\Series\\Red Dwarf\\S01\\Red Dwarf S01E01 - The End.avi");
 		movie = new Movie(new File("Soof (2013).avi"));
 		MoviemeterMovieInfoCollector mic = new MoviemeterMovieInfoCollector();
 		System.out.println(" id " + mic.getMoviemeterId(movie));

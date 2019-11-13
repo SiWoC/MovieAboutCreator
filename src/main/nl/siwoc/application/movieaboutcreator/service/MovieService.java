@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ServiceLoader;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -36,7 +35,6 @@ import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator.Feature;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoFolderCollector;
-import nl.siwoc.application.movieaboutcreator.Properties;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoBackgroundCollector;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoDetailsCollector;
 import nl.siwoc.application.movieaboutcreator.controller.MainController;
@@ -49,6 +47,8 @@ import nl.siwoc.application.movieaboutcreator.model.fileprops.FileProp;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.Resolution;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.VideoCodec;
 import nl.siwoc.application.movieaboutcreator.utils.ImageUtils;
+import nl.siwoc.application.movieaboutcreator.utils.Logger;
+import nl.siwoc.application.movieaboutcreator.utils.Properties;
 import nl.siwoc.mediainfo.FileProber;
 import nl.siwoc.mediainfo.MediaInfo;
 import nl.siwoc.application.movieaboutcreator.model.MovieFileFilter;
@@ -56,7 +56,6 @@ import nl.siwoc.application.movieaboutcreator.model.XmlDetails;
 
 public class MovieService {
 
-	private static final Logger LOGGER = Logger.getLogger(MainController.class.getName());
 	private Comparator<Movie> comparator = Comparator.comparing(Movie::toString); 
 	
 	private String moviesFolderName = "";
@@ -425,7 +424,7 @@ public class MovieService {
 	
 	public void generateAndCopy(Movie movie) {
 		writeXmlFile(movie);
-		LOGGER.info("Copying folderImageFile with length: " + controller.getFolderImageFile().length());
+		Logger.logInfo("Copying folderImageFile with length: " + controller.getFolderImageFile().length());
 		if (controller.getFolderImageFile().length() > 0) {
 			try {
 				Files.copy(controller.getFolderImageFile().toPath(), new File(movie.getFile().getParentFile(), "folder.jpg").toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -433,7 +432,7 @@ public class MovieService {
 				controller.setStatusLine("Unable to write folder-file for movie: " + movie.toString(), e);
 			}
 		}
-		LOGGER.info("Copying aboutImageFile with length: " + controller.getAboutImageFile().length());
+		Logger.logInfo("Copying aboutImageFile with length: " + controller.getAboutImageFile().length());
 		if (controller.getAboutImageFile().length() > 0) {
 			try {
 				// We leave this a png with jpg extension
