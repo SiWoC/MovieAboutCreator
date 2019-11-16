@@ -455,11 +455,11 @@ public class MovieService {
 		//model.setBackgroundCollector("TheMovieDb");
 		model.setMoviesFolderName("O:/downloads");
 		model.refreshMovies();
-		File file = new File("O:/downloads/Shazam (2019)/Shazam (2019).avi");
+		File file = new File("O:\\Kinder films\\Monsters Versus Aliens - Cloning Around (2014)\\Monsters Versus Aliens - Cloning Around (2014) [ID imdb tt2782214].avi");
 		Movie movie = new Movie(file);
 		model.getMovieInfo(movie);
 		model.writeXmlFile(movie);
 		model.writeSetValues(movie);
-		System.out.println(movie.getYear());
+		System.out.println(getFilePropsString(movie));
 	}
 }

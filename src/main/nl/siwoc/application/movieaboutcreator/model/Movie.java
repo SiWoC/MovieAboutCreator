@@ -35,6 +35,7 @@ import nl.siwoc.application.movieaboutcreator.model.fileprops.AudioCodec;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.Container;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.Resolution;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.VideoCodec;
+import nl.siwoc.mediainfo.utils.Logger;
 
 @JsonRootName(value="movie")
 @JsonPropertyOrder({ "title", "year", "rating", "plot", "runtime", "container", "genres"})
@@ -186,14 +187,37 @@ public class Movie {
 	}
 
 	public void setName(String _name) {
+		Logger.logTrace("Parsing moviename: " + _name);
 		this.name = _name;
-		int lastBracket = _name.lastIndexOf('(');
+		setTitleFromName(_name);
+		setYearFromName(_name);
+		setIdFromName(_name);
+	}
+	
+	private void setTitleFromName(String _name) {
+		int lastParenthesis = _name.lastIndexOf('(');
+		int lastSquare = _name.lastIndexOf('[');
+		int lastBracket = 0;
+		if (lastParenthesis > 0) {
+			lastBracket = lastParenthesis;
+		}
+		if (lastSquare > 0) {
+			if (lastParenthesis > 0) {
+				lastBracket = Math.min(lastParenthesis, lastSquare);
+			} else {
+				lastBracket = lastSquare;
+			}
+		}
+		
 		if (lastBracket > 0) {
 			setTitle(_name.substring(0, lastBracket).trim());
-			setYear(Integer.parseInt(_name.substring(lastBracket + 1,lastBracket + 5)));
 		} else {
 			setTitle(_name);
 		}
+	}
+
+	private void setIdFromName(String _name) {
+		// TODO parse info like [moviemeter 12345][themoviedb 67890]
 		// trying to get the id from the name
 		int idStart = _name.lastIndexOf('[');
 		if (idStart > 0) {
@@ -206,6 +230,26 @@ public class Movie {
 					setId(idParts[1], idParts[2]);
 				} else {
 					setId(idParts[0], idParts[1]);
+				}
+			}
+		}
+	}
+
+	private void setYearFromName(String _name) {
+		// parsing names like "Some Movie (NL) (2019)" or "Some Movie (2019) (720p DTS)"
+		// nothing I want to do about "Some Movie (1080p DTS) (2019)", just rename your file
+		String[] nameParts = _name.split("\\(");
+		int year = 0;
+		for (String namePart : nameParts) {
+			if (namePart.length() > 3) {
+				try {
+					year = Integer.parseInt(namePart.substring(0, 4));
+					if (year > 0) {
+						setYear(year);
+						break;
+					}
+				} catch (Exception e) {
+					
 				}
 			}
 		}
@@ -312,7 +356,8 @@ public class Movie {
 	}
 	
 	public static void main (String[] args) {
-		File f = new File("O:/Films/Winter's Tale (2014)/Winter's Tale 2014 [ID moviemeter 97163].mkv");
+		//File f = new File("O:/Films/Winter's Tale (2014)/Winter's Tale 2014 [ID moviemeter 97163].mkv");
+		File f = new File("Mirror Mirror Sneeuwwitje (2012) [ID moviemeter 80552]");
 		Movie movie = new Movie(f);
 		System.out.println(movie.getTitle());
 		System.out.println(movie.getYear());

@@ -18,6 +18,9 @@ package nl.siwoc.application.movieaboutcreator.collector.moviemeter.model;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDetails {
 	private long id;
 	private String url;

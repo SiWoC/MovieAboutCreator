@@ -278,7 +278,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		movie = new Movie(new File("I Am Mother (2019).avi"));
 		mic.getFolder(movie);
 		System.out.println(" id " + mic.getTheMovieDbId(movie));
-		movie = new Movie(new File("Wallace and Gromit - A Matter of Loaf and Death (2008)"));
+		movie = new Movie(new File("Free Birds (2013).mp4"));
 		System.out.println(" id " + mic.getTheMovieDbId(movie));
 		mic.getBackground(movie);
 		mic.getFolder(movie);

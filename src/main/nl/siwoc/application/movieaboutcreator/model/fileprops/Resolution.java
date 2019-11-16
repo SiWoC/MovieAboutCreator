@@ -47,7 +47,7 @@ public enum Resolution implements FileProp {
 		this.logo = logo;
 	}
 	
-	public static Resolution getResolution(int width, int height) throws Exception {
+	public static Resolution getResolution(int width, int height) throws IllegalArgumentException {
 		if (height > 720 || width > 1280) {
 			return RES1080;
 		} else if (height > 576 || width > 720) {
@@ -57,7 +57,7 @@ public enum Resolution implements FileProp {
 		} else if (width > 640) {
 			return NTSC;
 		}
-		throw new Exception("Unknown Resolution: [RES" + width + "x" + height + "]");
+		throw new IllegalArgumentException("Unknown Resolution: [RES" + width + "x" + height + "]");
 	}
 
 }

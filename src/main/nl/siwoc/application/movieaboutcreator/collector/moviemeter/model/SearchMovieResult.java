@@ -16,6 +16,9 @@
  *******************************************************************************/
 package nl.siwoc.application.movieaboutcreator.collector.moviemeter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchMovieResult {
 	private long id;
 	private String title;
