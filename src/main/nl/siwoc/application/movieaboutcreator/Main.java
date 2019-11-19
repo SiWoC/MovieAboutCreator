@@ -28,8 +28,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import nl.siwoc.application.movieaboutcreator.utils.Logger;
-import nl.siwoc.application.movieaboutcreator.utils.Properties;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
 
@@ -42,6 +42,8 @@ public class Main extends Application {
 			AnchorPane root = FXMLLoader.load(getClass().getResource("gui/Main.fxml"));
 			Scene scene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
 			scene.getStylesheets().add(getClass().getResource("gui/application.css").toExternalForm());
+			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("gui/Movie128.png")));
+			primaryStage.setTitle("MovieAboutCreator");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {

@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <TitledPane collapsible="false" text="Change query used in searches" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.siwoc.application.movieaboutcreator.controller.ChangeQueryController">
    <content>
@@ -15,12 +16,16 @@
 		      <Label layoutX="14.0" layoutY="79.0" text="Year" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="53.0" />
 		      <TextField fx:id="txtQuery" layoutX="59.0" layoutY="40.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
 		      <TextField fx:id="txtYear" layoutX="59.0" layoutY="75.0" prefHeight="25.0" prefWidth="65.0" AnchorPane.leftAnchor="59.0" AnchorPane.topAnchor="49.0" />
-		      <Button fx:id="btnTestQuery" layoutX="59.0" layoutY="113.0" mnemonicParsing="false" onAction="#testQuery" prefWidth="52.0" text="Test" AnchorPane.leftAnchor="59.0" AnchorPane.topAnchor="84.0" />
+		      <Button fx:id="btnTestQuery" layoutX="59.0" layoutY="113.0" mnemonicParsing="false" onAction="#testQuery" text="Test" AnchorPane.leftAnchor="59.0" AnchorPane.topAnchor="84.0" />
 		      <ListView fx:id="lvResults" layoutX="59.0" layoutY="149.0" prefHeight="199.0" prefWidth="327.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="119.0" />
 		      <Label layoutX="17.0" layoutY="149.0" text="Results" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="123.0" />
-		      <Button fx:id="btnUseAndRename" layoutX="59.0" layoutY="341.0" mnemonicParsing="false" onAction="#useQueryAndRenameFile" text="Use and Rename" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="59.0" />
-		      <Button fx:id="btnCancel" layoutX="334.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancel" prefWidth="52.0" text="Cancel" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-            <Button fx:id="btnUse" layoutX="184.0" layoutY="339.0" mnemonicParsing="false" onAction="#useQuery" prefWidth="52.0" text="Use" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="175.0" />
+            <HBox layoutX="68.5999984741211" layoutY="339.3999938964844" spacing="10.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="59.0">
+               <children>
+      		      <Button fx:id="btnUseAndRename" mnemonicParsing="false" onAction="#useQueryAndRenameFile" text="Use and Rename" />
+                  <Button fx:id="btnUse" mnemonicParsing="false" onAction="#useQuery" text="Use" />
+               </children>
+            </HBox>
+      		      <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancel" text="Cancel" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
 		   </children>
       </AnchorPane>
    </content>
