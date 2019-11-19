@@ -29,6 +29,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
@@ -40,6 +41,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import nl.siwoc.application.movieaboutcreator.Main;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoBackgroundCollector;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoDetailsCollector;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoFolderCollector;
@@ -197,7 +199,10 @@ public class MainController {
 
 	public void browseMoviesFolder(ActionEvent event) {
 		DirectoryChooser folderChooser = new DirectoryChooser();
-		folderChooser.setInitialDirectory(new File(txtMoviesFolderName.getText()));
+		File moviesFolder = new File(txtMoviesFolderName.getText());
+		if (moviesFolder.isDirectory()) {
+			folderChooser.setInitialDirectory(moviesFolder);
+		}
 		folderChooser.setTitle("Where are your movies stored?");
 		File selectedFolder = folderChooser.showDialog((Stage)rootPane.getScene().getWindow());
 		if (selectedFolder != null) {
@@ -215,7 +220,7 @@ public class MainController {
 		model.refreshMovies();
 	}
 
-	public void getMovieInfo(Movie movie) {
+	private void getMovieInfo(Movie movie) {
 		if (movie != null) {
 			model.getMovieInfo(movie);
 			// didn't want to implement boolean firstload
@@ -259,7 +264,7 @@ public class MainController {
 		}
 	}
 		
-	public void generateAndCopy(Movie selectedMovie, File htmlFile, File outputFile, double width, double height) {
+	private void generateAndCopy(Movie selectedMovie, File htmlFile, File outputFile, double width, double height) {
 		// rootPane is the root of original scene in an FXML controller you get this when you assign it an id
 		rootPane.setEffect(new GaussianBlur());
 		Stage primaryStage = (Stage)rootPane.getScene().getWindow();
@@ -300,6 +305,33 @@ public class MainController {
 		pt.play();
 		// GO!
         popupStage.show();
+	}
+
+	public void changeQuery(ActionEvent event) {
+		Movie selectedMovie = lvMovies.getSelectionModel().getSelectedItem();
+		if (selectedMovie != null) {
+			changeQuery(selectedMovie);
+		}
+	}
+	
+	private void changeQuery(Movie selectedMovie) {
+		// rootPane is the root of original scene in an FXML controller you get this when you assign it an id
+		Stage primaryStage = (Stage)rootPane.getScene().getWindow();
+		// creating separate TitledPane to hold the changeQuery controls
+		FXMLLoader changeQueryLoader = new FXMLLoader(Main.class.getResource("gui/ChangeQuery.fxml"));
+		TitledPane changeQueryPane;
+		try {
+			changeQueryPane = (TitledPane)changeQueryLoader.load();
+	        Stage changeQueryStage = new Stage(StageStyle.TRANSPARENT);
+	        changeQueryStage.initOwner(primaryStage);
+	        changeQueryStage.initModality(Modality.APPLICATION_MODAL);
+	        changeQueryStage.setScene(new Scene(changeQueryPane));
+			ChangeQueryController changeQueryController = changeQueryLoader.getController();
+			changeQueryController.initData(rootPane, changeQueryStage, selectedMovie);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 }

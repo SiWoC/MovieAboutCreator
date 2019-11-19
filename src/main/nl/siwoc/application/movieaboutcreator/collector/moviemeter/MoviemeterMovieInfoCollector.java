@@ -190,7 +190,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 	
 	private String createQuery(Movie movie) {
 		try {
-			return URLEncoder.encode(movie.getTitle(), "UTF-8");
+			return URLEncoder.encode(movie.getQuery(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// never occurs, UTF-8 is hardcoded
 			throw new RuntimeException(e);
@@ -233,7 +233,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	private boolean matchTitle(SearchMovieResult searchMovieResult, Movie movie) {
 		String searchTitle = searchMovieResult.getTitle().replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
-		String movieTitle = movie.getTitle().replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
+		String movieTitle = movie.getQuery().replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
 		if (searchTitle.equals(movieTitle)) {
 			return true;
 		}
@@ -248,18 +248,21 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	public static void main(String[] args) throws Exception {
 		Movie movie; 
-		movie = new Movie(new File("Soof (2013).avi"));
 		MoviemeterMovieInfoCollector mic = new MoviemeterMovieInfoCollector();
+		movie = new Movie(new File("Soof (2013).avi"));
 		System.out.println(" id " + mic.getMoviemeterId(movie));
 		mic.getFolder(movie);
-		movie = new Movie(new File("Brave (2012).avi"));
-		mic.getFolder(movie);
-		System.out.println(" id " + mic.getMoviemeterId(movie));
-		movie = new Movie(new File("Wolf (2013).avi"));
+		movie = new Movie(new File("A Wrinkle in Time (2018).avi"));
 		System.out.println(" id " + mic.getMoviemeterId(movie));
 		mic.getFolder(movie);
-		mic.getDetails(movie);
-		System.out.println(" plot: " + movie.getPlot());
+		movie = new Movie(new File("Battleship 2012 720p BRRiP XViD AC3-LEGi0N_NL ingebakken.avi"));
+		//movie = new Movie(new File("Battleship (2012).avi"));
+		System.out.println(" getDetails returned: " + mic.getDetails(movie));
+		System.out.println(" id " + mic.getMoviemeterId(movie));
+		movie.setQuery("Battleship");
+		movie.setYear(2012);
+		System.out.println(" getDetails returned: " + mic.getDetails(movie));
+		System.out.println(" id " + mic.getMoviemeterId(movie));
 	}
 
 	@Override

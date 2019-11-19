@@ -48,8 +48,6 @@ public class Logger {
 			FileHandler handler = new FileHandler("log/MovieAboutCreator.log", 500000, 2, true);
 			handler.setFormatter(new SimpleFormatter());
 			java.util.logging.Logger.getLogger(Logger.class.getName()).addHandler(handler);
-			String logLevel = Properties.getProperty("logging.level");
-			setLogLevel(logLevel);
 		} catch (IOException e) {
 			throw new RuntimeException("Could not create log file",e);
 		}

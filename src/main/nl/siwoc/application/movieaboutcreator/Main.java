@@ -28,6 +28,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import nl.siwoc.application.movieaboutcreator.utils.Logger;
+import nl.siwoc.application.movieaboutcreator.utils.Properties;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
@@ -53,6 +54,7 @@ public class Main extends Application {
 	public void init() throws Exception {
 		Logger.logInfo("Initializing");
 		createPropertiesFile();
+		//Logger.setLogLevel(Properties.getProperty("logging.level"));
 		mkDir("generated");
 		mkDir("css");
 		mkDir("pictures");

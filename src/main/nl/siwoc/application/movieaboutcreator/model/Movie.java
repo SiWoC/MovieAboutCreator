@@ -50,6 +50,9 @@ public class Movie {
 	@JsonProperty
 	private String title;
 
+	@JsonIgnore
+	private String query;
+
 	@JsonProperty
 	private int year;
 
@@ -142,6 +145,12 @@ public class Movie {
 		} else {
 			setName(FilenameUtils.getBaseName(_file.getName()));
 		}
+		// only in Constructor, might get changed separately
+		setQuery(getTitle());
+	}
+
+	public Movie() {
+		// TODO Auto-generated constructor stub
 	}
 
 	private void createDVD(File movie) {
@@ -295,6 +304,14 @@ public class Movie {
 		this.title = _title;
 	}
 
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
 	public int getYear() {
 		return year;
 	}
@@ -311,6 +328,10 @@ public class Movie {
 		ids.put(idType.toLowerCase(), id);
 	}
 	
+	public void clearIds() {
+		ids.clear();
+	}
+
 	public void setContainer(Container _container) {
 		this.container = _container;
 	}

@@ -209,7 +209,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 	private String createQuery(Movie movie) {
 		String query = null;
 		try {
-			query = URLEncoder.encode(movie.getTitle(), "UTF-8");
+			query = URLEncoder.encode(movie.getQuery(), "UTF-8");
 			if (movie.getYear() > 0) {
 				query = query + "&year=" + movie.getYear();
 			}
@@ -256,7 +256,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 	
 	private boolean matchTitle(SearchMovieResult searchMovieResult, Movie movie) {
 		String searchTitle = searchMovieResult.getTitle().replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
-		String movieTitle = movie.getTitle().replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
+		String movieTitle = movie.getQuery().replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
 		if (searchTitle.equals(movieTitle)) {
 			return true;
 		}
@@ -271,19 +271,15 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	public static void main(String[] args) throws Exception {
 		Movie movie; 
-		movie = new Movie(new File("Spiderman 3 (2007).avi"));
 		TheMovieDbMovieInfoCollector mic = new TheMovieDbMovieInfoCollector();
+		movie = new Movie(new File("Battleship 2012 720p BRRiP XViD AC3-LEGi0N_NL ingebakken.avi"));
+		//movie = new Movie(new File("Battleship (2012).avi"));
+		System.out.println(" getDetails returned: " + mic.getDetails(movie));
 		System.out.println(" id " + mic.getTheMovieDbId(movie));
-		mic.getFolder(movie);
-		movie = new Movie(new File("I Am Mother (2019).avi"));
-		mic.getFolder(movie);
+		movie.setQuery("Battleship");
+		movie.setYear(2012);
+		System.out.println(" getDetails returned: " + mic.getDetails(movie));
 		System.out.println(" id " + mic.getTheMovieDbId(movie));
-		movie = new Movie(new File("Free Birds (2013).mp4"));
-		System.out.println(" id " + mic.getTheMovieDbId(movie));
-		mic.getBackground(movie);
-		mic.getFolder(movie);
-		mic.getDetails(movie);
-		System.out.println(" plot: " + movie.getPlot());
 	}
 
 	@Override
