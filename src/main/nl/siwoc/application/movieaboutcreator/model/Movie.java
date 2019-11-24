@@ -17,6 +17,8 @@
 package nl.siwoc.application.movieaboutcreator.model;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -141,7 +143,7 @@ public class Movie {
 	public Movie(File _file) {
 		this.setFile(_file);
 		if (_file.isDirectory()) {
-			createDVD(_file);
+			setName(_file.getParentFile().getName());
 		} else {
 			setName(FilenameUtils.getBaseName(_file.getName()));
 		}
@@ -150,13 +152,6 @@ public class Movie {
 	}
 
 	public Movie() {
-		// TODO Auto-generated constructor stub
-	}
-
-	private void createDVD(File movie) {
-		setName(movie.getParentFile().getName());
-		setContainer(Container.DVD);
-		setVideoCodec(VideoCodec.MPEG);
 	}
 
 	public File getFile() {
@@ -165,6 +160,19 @@ public class Movie {
 
 	public void setFile(File file) {
 		this.file = file;
+	}
+	
+	public void renameFile(String newName) throws Exception {
+		File newFile;
+		if (getFile().isDirectory()) {
+			// DVD rename parent folder of file
+			newFile = new File(getFile().getParentFile().getParentFile(), newName);
+			Files.move(getFile().getParentFile().toPath(), newFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
+		} else {
+			newFile = new File(getFile().getParentFile(), newName + "." + FilenameUtils.getExtension(getFile().getName()));
+			Files.move(getFile().toPath(), newFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
+		}
+		setFile(newFile);
 	}
 
 	public String getName() {
@@ -175,6 +183,10 @@ public class Movie {
 		return duration;
 	}
 
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
+
 	public String getRuntime() {
 		return String.valueOf(duration/60) + "h " + String.valueOf(duration % 60) + "m";
 	}
@@ -183,16 +195,12 @@ public class Movie {
 		return rating;
 	}
 
-	public int getXmlRating() {
-		return Math.round(rating * 10);
-	}
-
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
-
 	public void setRating(float rating) {
 		this.rating = rating;
+	}
+
+	public int getXmlRating() {
+		return Math.round(rating * 10);
 	}
 
 	public void setName(String _name) {
@@ -268,12 +276,24 @@ public class Movie {
 		return plot;
 	}
 
+	public void setPlot(String plot) {
+		this.plot = plot;
+	}
+
 	public ArrayList<String> getGenres() {
 		return genres;
 	}
 
+	public void setGenres(ArrayList<String> genres) {
+		this.genres = genres;
+	}
+
 	public ArrayList<String> getDirectors() {
 		return directors;
+	}
+
+	public void setDirectors(ArrayList<String> _directors) {
+		this.directors = _directors;
 	}
 
 	public ArrayList<Actor> getActors() {
@@ -282,18 +302,6 @@ public class Movie {
 
 	public void setActors(ArrayList<Actor> _actors) {
 		this.actors = _actors;
-	}
-
-	public void setDirectors(ArrayList<String> _directors) {
-		this.directors = _directors;
-	}
-
-	public void setGenres(ArrayList<String> genres) {
-		this.genres = genres;
-	}
-
-	public void setPlot(String plot) {
-		this.plot = plot;
 	}
 
 	public String getTitle() {

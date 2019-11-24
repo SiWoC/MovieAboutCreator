@@ -24,7 +24,6 @@ import javax.imageio.ImageIO;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -138,7 +137,10 @@ public class MainController {
 	}
 
 	public void initialize() {
+		System.out.println("### loglevel: " + Properties.getProperty("logging.level"));
+		Logger.setLogLevel(Properties.getProperty("logging.level"));
 		setStatusLine("Initializing");
+		wvHtmlPreview.setContextMenuEnabled(false);
 		model = new MovieService();
 		model.setController(this);
 		txtMoviesFolderName.setText(Properties.getProperty("movies.foldername"));
@@ -239,23 +241,6 @@ public class MainController {
 		}
 	}
 	
-	private class ReloadListener implements ChangeListener<Worker.State> {
-		  @Override
-		  public void changed(
-		    ObservableValue<? extends Worker.State> observable,
-		    Worker.State oldValue, Worker.State newValue ) {
-
-		    if( newValue != Worker.State.SUCCEEDED ) {
-		      return;
-		    }
-
-		    // Your logic here
-		  }
-	}
-		
-	ReloadListener reloadListener = new ReloadListener();
-
-	
 	public void generateAndCopy(ActionEvent event) {
 		Movie selectedMovie = lvMovies.getSelectionModel().getSelectedItem();
 		if (selectedMovie != null) {
@@ -327,11 +312,23 @@ public class MainController {
 	        changeQueryStage.initModality(Modality.APPLICATION_MODAL);
 	        changeQueryStage.setScene(new Scene(changeQueryPane));
 			ChangeQueryController changeQueryController = changeQueryLoader.getController();
-			changeQueryController.initData(rootPane, changeQueryStage, selectedMovie);
+			changeQueryController.initData(rootPane, this, changeQueryStage, selectedMovie);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+
+	public void renameMovie(String newName) {
+		int selectedIndex = lvMovies.getSelectionModel().getSelectedIndex();
+		Movie selectedMovie = lvMovies.getSelectionModel().getSelectedItem();
+		selectedMovie.setName(newName);
+		try {
+			selectedMovie.renameFile(newName);
+		} catch (Exception e) {
+			setStatusLine("Unable to rename movie file", e);
+		}
+		model.getMovies().set(selectedIndex, selectedMovie);
 	}
 
 }

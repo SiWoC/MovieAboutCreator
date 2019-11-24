@@ -30,6 +30,7 @@ public class ChangeQueryController {
 	private ObservableList<String> observableResultsList = FXCollections.observableArrayList();
 	
 	private Pane rootPane;
+	private MainController mainController;
 	private Stage changeQueryStage;
 	private Movie movie;
 	
@@ -39,6 +40,14 @@ public class ChangeQueryController {
 
 	public void setRootPane(Pane rootPane) {
 		this.rootPane = rootPane;
+	}
+
+	public MainController getMainController() {
+		return mainController;
+	}
+
+	public void setMainController(MainController mainController) {
+		this.mainController = mainController;
 	}
 
 	public Stage getChangeQueryStage() {
@@ -61,8 +70,9 @@ public class ChangeQueryController {
 		lvResults.setItems(observableResultsList);
 	}
 
-	public void initData(Pane _rootPane, Stage _changeQueryStage, Movie _movie) {
+	public void initData(Pane _rootPane, MainController _mainController, Stage _changeQueryStage, Movie _movie) {
 		setRootPane(_rootPane);
+		setMainController(_mainController);
 		setChangeQueryStage(_changeQueryStage);
 		setMovie(_movie);
 		txtQuery.setText(getMovie().getQuery());
@@ -92,6 +102,7 @@ public class ChangeQueryController {
 	}
 
 	public void useQueryAndRenameFile(ActionEvent event) {
+		getMainController().renameMovie(txtQuery.getText() + " (" + txtYear.getText() + ")");
 		use();
 		close();
 	}
@@ -99,12 +110,14 @@ public class ChangeQueryController {
 	public void useQuery(ActionEvent event) {
 		use();
 		close();
+		
 	}
 	
 	private void use() {
 		getMovie().clearIds();
 		getMovie().setQuery(txtQuery.getText());
 		getMovie().setYear(Integer.valueOf(txtYear.getText()));
+		getMainController().reGenerate(null);
 	}
 	
 	public void cancel(ActionEvent event) {

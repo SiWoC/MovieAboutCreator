@@ -17,7 +17,6 @@
 package nl.siwoc.application.movieaboutcreator.collector.moviemeter.model;
 
 import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -37,9 +36,10 @@ public class MovieDetails {
 	private ArrayList<String> countries = new ArrayList<String>();
 	private ArrayList<String> genres = new ArrayList<String>();
 	private ArrayList<Actor> actors = new ArrayList<Actor>();
-	private ArrayList<String> directors = new ArrayList<String>();
+	private ArrayList<Director> directors = new ArrayList<Director>();
 	private String userVote = null;
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Actor {
 		private String name;
 		private boolean voice;
@@ -65,6 +65,33 @@ public class MovieDetails {
 		}
 	}
 	
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	public static class Director {
+		private String name;
+		private String id;
+
+		public String getName() {
+			return name;
+		}
+		
+		public void setName(String _name) {
+			this.name = _name;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public String toString() {
+			return getName();
+		}
+	}
+	
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public class Posters {
 		private String thumb;
 		private String small;
@@ -169,7 +196,11 @@ public class MovieDetails {
 	}
 
 	public ArrayList<String> getDirectors() {
-		return directors;
+		ArrayList<String> strings = new ArrayList<>(directors.size());
+		for (Director director : directors) {
+		    strings.add(director.toString());
+		}
+		return strings;
 	}
 
 	public void setCountries(ArrayList<String> countries) {
@@ -184,7 +215,7 @@ public class MovieDetails {
 		this.actors = actors;
 	}
 
-	public void setDirectors(ArrayList<String> _directors) {
+	public void setDirectors(ArrayList<Director> _directors) {
 		this.directors = _directors;
 	}
 

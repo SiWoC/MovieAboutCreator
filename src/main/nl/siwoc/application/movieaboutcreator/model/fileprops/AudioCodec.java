@@ -19,6 +19,7 @@ package nl.siwoc.application.movieaboutcreator.model.fileprops;
 public enum AudioCodec implements FileProp {
 
 	AAC("AAC","audiocodec_aac.png"),
+	MP4A("MP4A","audiocodec_aac.png"),
 	AC3("AC3","audiocodec_dolby.png"),
 	EAC3("EAC3","audiocodec_dolby.png"),
 	DOLBY("DOLBY","audiocodec_dolby.png"),
@@ -33,7 +34,6 @@ public enum AudioCodec implements FileProp {
 	DTS_TEST("DTS_TEST","audiocodec_dts_test.png"),
 	FLAC("FLAC","audiocodec_flac.png"),
 	MP3("MP3","audiocodec_mp3.png"),
-	MP4A("MP4A","audiocodec_mp3.png"),
 	OGG("OGG","audiocodec_ogg.png"),
 	PCM("PCM","audiocodec_pcm.png"),
 	SOWT("SOWT","audiocodec_pcm.png"),

@@ -30,6 +30,7 @@ public enum VideoCodec implements FileProp {
 	XVID("XVID","videocodec_xvid.png"),
 	AVC1("AVC1","videocodec_h264.png"),
 	H264("H264","videocodec_h264.png"),
+	MPEGH("MPEGH","videocodec_h265.png"),
 	MS("MS","videocodec_ms.png");
 	
 	private String name;
