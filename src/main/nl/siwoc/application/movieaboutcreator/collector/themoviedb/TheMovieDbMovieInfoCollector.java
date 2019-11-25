@@ -39,9 +39,13 @@ import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.SearchM
 import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.SearchMovieResult;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
 import nl.siwoc.application.movieaboutcreator.model.Movie.Actor;
-import nl.siwoc.application.movieaboutcreator.utils.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,MovieInfoFolderCollector,MovieInfoBackgroundCollector {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(TheMovieDbMovieInfoCollector.class);
 
 	final ObjectMapper mapper = new ObjectMapper();
 	
@@ -92,7 +96,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 			// call image api
 			try {
 				URL url = new URL(imageUrl);
-				Logger.logTrace("HTTP imageUrl call: " + url);
+				LOG.trace("HTTP imageUrl call: " + url);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				if (conn.getResponseCode() != 200) {
@@ -124,7 +128,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call movie api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "movie/" + theMovieDbId + "?api_key=" + Configuration.ApiKey + "&language=en-US&append_to_response=credits");
-			Logger.logTrace("HTTP details call: " + url);
+			LOG.trace("HTTP details call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
@@ -184,7 +188,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call search movie api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "search/movie?api_key=" + Configuration.ApiKey + "&include_adult=false&query=" + query);
-			Logger.logTrace("HTTP search call: " + url);
+			LOG.trace("HTTP search call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {

@@ -17,10 +17,13 @@
 package nl.siwoc.application.movieaboutcreator.model;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -37,11 +40,15 @@ import nl.siwoc.application.movieaboutcreator.model.fileprops.AudioCodec;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.Container;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.Resolution;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.VideoCodec;
-import nl.siwoc.mediainfo.utils.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonRootName(value="movie")
 @JsonPropertyOrder({ "title", "year", "rating", "plot", "runtime", "container", "genres"})
 public class Movie {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(Movie.class);
 	
 	@JsonIgnore
 	private File file;
@@ -169,6 +176,22 @@ public class Movie {
 			newFile = new File(getFile().getParentFile().getParentFile(), newName);
 			Files.move(getFile().getParentFile().toPath(), newFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
 		} else {
+			// rename srt files and maybe old.xml which might be overwritten later
+			List<File> movies = Arrays.asList(getFile().getParentFile().listFiles(new FilenameFilter() {
+				
+				@Override
+				public boolean accept(File dir, String name) {
+					// BaseName is the same, but extension is different 
+					// the actual movie we do later because we need that new File
+					return FilenameUtils.getBaseName(name).equals(FilenameUtils.getBaseName(getFile().getName()))
+							&& !FilenameUtils.getExtension(name).equals(FilenameUtils.getExtension(getFile().getName()));
+				}
+			}));
+			for (File movieFile : movies) {
+				LOG.info("Renaming file: " + movieFile.getName());
+				Files.move(movieFile.toPath(), new File(movieFile.getParentFile(), newName + "." + FilenameUtils.getExtension(movieFile.getName())).toPath(), StandardCopyOption.ATOMIC_MOVE);
+			}
+			LOG.info("Renaming file: " + getFile().getName());
 			newFile = new File(getFile().getParentFile(), newName + "." + FilenameUtils.getExtension(getFile().getName()));
 			Files.move(getFile().toPath(), newFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
 		}
@@ -204,7 +227,7 @@ public class Movie {
 	}
 
 	public void setName(String _name) {
-		Logger.logTrace("Parsing moviename: " + _name);
+		LOG.trace("Parsing moviename: " + _name);
 		this.name = _name;
 		setTitleFromName(_name);
 		setYearFromName(_name);

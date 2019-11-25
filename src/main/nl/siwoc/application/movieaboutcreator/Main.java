@@ -27,14 +27,17 @@ import org.apache.commons.io.IOUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import nl.siwoc.application.movieaboutcreator.utils.Logger;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main extends Application {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -43,7 +46,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
 			scene.getStylesheets().add(getClass().getResource("gui/application.css").toExternalForm());
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("gui/Movie128.png")));
-			primaryStage.setTitle("MovieAboutCreator");
+			primaryStage.setTitle("M.A.C.");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
@@ -54,7 +57,7 @@ public class Main extends Application {
 	
 	@Override
 	public void init() throws Exception {
-		Logger.logInfo("Initializing");
+		LOG.info("Initializing");
 		createPropertiesFile();
 		//Logger.setLogLevel(Properties.getProperty("logging.level"));
 		mkDir("generated");
@@ -65,12 +68,12 @@ public class Main extends Application {
 	private void createPropertiesFile() {
 		File propertiesFile = new File ("movieaboutcreator.properties");
 		if (!propertiesFile.exists()) {
-			Logger.logInfo("Creating properties file");
+			LOG.info("Creating properties file");
 			try (InputStream is = getClass().getClassLoader().getResourceAsStream("resources/movieaboutcreator.org.properties")) {
 				FileUtils.copyInputStreamToFile(is, propertiesFile);
 			} catch (IOException e) {
 				// too bad
-				Logger.logError("Error creating properties file: ", e);
+				LOG.error("Error creating properties file: ", e);
 			}
 		}
 		
@@ -78,19 +81,19 @@ public class Main extends Application {
 
 	private void mkDir(String folderName) throws IOException {
 		File directoryToCreate = new File("./" + folderName);
-		Logger.logInfo("Creating " + folderName + " exists=" + directoryToCreate.exists());
+		LOG.info("Creating " + folderName + " exists=" + directoryToCreate.exists());
 		if (!directoryToCreate.exists()) {
 			List<String> files = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("resources/html/" + folderName + ".txt"), Charset.forName("UTF-8"));
 			for (String string : files) {
 				
 				File outputFile = new File(folderName + "/" + string);
-				Logger.logInfo("Creating " + outputFile.getCanonicalPath());
+				LOG.info("Creating " + outputFile.getCanonicalPath());
 				try (InputStream is = getClass().getClassLoader().getResourceAsStream("resources/html/" + folderName + "/" + string)) {
-					Logger.logInfo("Reading " + "resources/html/" + folderName + "/" + string);
+					LOG.info("Reading " + "resources/html/" + folderName + "/" + string);
 					FileUtils.copyInputStreamToFile(is, outputFile);
 					is.close();
 				} catch (Exception e) {
-					Logger.logError("Error creating template files: ", e);
+					LOG.error("Error creating template files: ", e);
 				}
 			}
 			/*

@@ -40,8 +40,12 @@ import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.FileImageOutputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ImageUtils {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(ImageUtils.class);
 
 	// for TheMovieDB image conversion
 	private static final int[] RGB_MASKS = {0xFF0000, 0xFF00, 0xFF};
@@ -112,7 +116,7 @@ public class ImageUtils {
 			// call image api
 			try {
 				URL url = new URL(imageUrl);
-				Logger.logTrace("HTTP imageUrl call: " + url);
+				LOG.trace("HTTP imageUrl call: " + url);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				if (conn.getResponseCode() != 200) {

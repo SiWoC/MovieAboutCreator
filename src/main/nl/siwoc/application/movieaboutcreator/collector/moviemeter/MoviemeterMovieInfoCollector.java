@@ -35,9 +35,13 @@ import nl.siwoc.application.movieaboutcreator.collector.MovieInfoDetailsCollecto
 import nl.siwoc.application.movieaboutcreator.collector.moviemeter.model.MovieDetails;
 import nl.siwoc.application.movieaboutcreator.collector.moviemeter.model.SearchMovieResult;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
-import nl.siwoc.application.movieaboutcreator.utils.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,MovieInfoFolderCollector {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(MoviemeterMovieInfoCollector.class);
 
 	final ObjectMapper mapper = new ObjectMapper();
 	
@@ -62,14 +66,14 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 			MovieDetails movieDetails = getDetailsFromApi(movie);
 			if (movieDetails != null && movieDetails.getPosters() != null && movieDetails.getPosters().getRegular() != null) {
 				String folderURL = movieDetails.getPosters().getRegular();
-				Logger.logTrace("folder: " + folderURL);
+				LOG.trace("folder: " + folderURL);
 				byte[] result = null;
 				HttpURLConnection conn = null;
 				
 				// call moviemeter api
 				try {
 					URL url = new URL(folderURL);
-					Logger.logTrace("HTTP folderImage call: " + url);
+					LOG.trace("HTTP folderImage call: " + url);
 					conn = (HttpURLConnection) url.openConnection();
 					conn.setRequestMethod("GET");
 					if (conn.getResponseCode() != 200) {
@@ -106,7 +110,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call moviemeter api
 		try {
 			URL url = new URL(Configuration.BaseUrl + moviemeterId + "?api_key=" + Configuration.ApiKey);
-			Logger.logTrace("HTTP details call: " + url);
+			LOG.trace("HTTP details call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
@@ -164,7 +168,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call moviemeter api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "?q=" + query + "&api_key=" + Configuration.ApiKey);
-			Logger.logTrace("HTTP search call: " + url);
+			LOG.trace("HTTP search call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {

@@ -47,9 +47,13 @@ import nl.siwoc.application.movieaboutcreator.collector.MovieInfoFolderCollector
 import nl.siwoc.application.movieaboutcreator.model.Movie;
 import nl.siwoc.application.movieaboutcreator.service.MovieService;
 import nl.siwoc.application.movieaboutcreator.utils.Properties;
-import nl.siwoc.application.movieaboutcreator.utils.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MainController {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
 	private File htmlFile = new File ("generated/template.html");
 	private File folderImageFile = new File("generated/folder.jpg");
@@ -128,17 +132,17 @@ public class MainController {
 	
 	public void setStatusLine(String statusLineText, Throwable e) {
 		if (txtStatusArea != null) {
-			Logger.logInfo(statusLineText);
+			LOG.info(statusLineText);
 			txtStatusArea.setText(statusLineText + "\r\n" + txtStatusArea.getText().substring(0, Math.min(txtStatusArea.getLength(), 2000)));
 		}
 		if (e != null) {
-			Logger.logError(statusLineText, e);
+			LOG.error(statusLineText, e);
 		}
 	}
 
 	public void initialize() {
-		System.out.println("### loglevel: " + Properties.getProperty("logging.level"));
-		Logger.setLogLevel(Properties.getProperty("logging.level"));
+		//System.out.println("### loglevel: " + Properties.getProperty("logging.level"));
+		//Logger.setLogLevel(Properties.getProperty("logging.level"));
 		setStatusLine("Initializing");
 		wvHtmlPreview.setContextMenuEnabled(false);
 		model = new MovieService();
@@ -275,7 +279,7 @@ public class MainController {
 				String format = "png";
 				try {
 					ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, outputFile);
-					Logger.logInfo("Generated aboutImageFile with length: " + outputFile.length());
+					LOG.info("Generated aboutImageFile with length: " + outputFile.length());
 					model.generateAndCopy(selectedMovie);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

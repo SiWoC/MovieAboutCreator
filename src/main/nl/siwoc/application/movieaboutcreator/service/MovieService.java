@@ -47,14 +47,18 @@ import nl.siwoc.application.movieaboutcreator.model.fileprops.FileProp;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.Resolution;
 import nl.siwoc.application.movieaboutcreator.model.fileprops.VideoCodec;
 import nl.siwoc.application.movieaboutcreator.utils.ImageUtils;
-import nl.siwoc.application.movieaboutcreator.utils.Logger;
 import nl.siwoc.application.movieaboutcreator.utils.Properties;
 import nl.siwoc.mediainfo.FileProber;
 import nl.siwoc.mediainfo.MediaInfo;
 import nl.siwoc.application.movieaboutcreator.model.MovieFileFilter;
 import nl.siwoc.application.movieaboutcreator.model.XmlDetails;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MovieService {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(MovieService.class);
 
 	private Comparator<Movie> comparator = Comparator.comparing(Movie::toString); 
 	
@@ -424,7 +428,7 @@ public class MovieService {
 	
 	public void generateAndCopy(Movie movie) {
 		writeXmlFile(movie);
-		Logger.logInfo("Copying folderImageFile with length: " + controller.getFolderImageFile().length());
+		LOG.info("Copying folderImageFile with length: " + controller.getFolderImageFile().length());
 		if (controller.getFolderImageFile().length() > 0) {
 			try {
 				Files.copy(controller.getFolderImageFile().toPath(), new File(movie.getFile().getParentFile(), "folder.jpg").toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -432,7 +436,7 @@ public class MovieService {
 				controller.setStatusLine("Unable to write folder-file for movie: " + movie.toString(), e);
 			}
 		}
-		Logger.logInfo("Copying aboutImageFile with length: " + controller.getAboutImageFile().length());
+		LOG.info("Copying aboutImageFile with length: " + controller.getAboutImageFile().length());
 		if (controller.getAboutImageFile().length() > 0) {
 			try {
 				// We leave this a png with jpg extension

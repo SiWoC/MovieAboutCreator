@@ -24,9 +24,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.GetConfigurationResponse;
 import nl.siwoc.application.movieaboutcreator.utils.Properties;
-import nl.siwoc.application.movieaboutcreator.utils.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Configuration {
+	
+	protected static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
 	public static final String IdType = "themoviedb";
 	public static String ApiKey = Properties.getProperty("themoviedb.apikey");
@@ -43,7 +47,7 @@ public class Configuration {
 		// call themoviedb configuration api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "configuration?api_key=" + Configuration.ApiKey);
-			Logger.logTrace("HTTP configuration call: " + url);
+			LOG.trace("HTTP configuration call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
