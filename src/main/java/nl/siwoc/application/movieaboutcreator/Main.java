@@ -42,10 +42,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			AnchorPane root = FXMLLoader.load(getClass().getResource("gui/Main.fxml"));
+			AnchorPane root = FXMLLoader.load(getClass().getResource("/resources/gui/Main.fxml"));
 			Scene scene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
-			scene.getStylesheets().add(getClass().getResource("gui/application.css").toExternalForm());
-			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("gui/Movie128.png")));
+			scene.getStylesheets().add(getClass().getResource("/resources/gui/application.css").toExternalForm());
+			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/resources/gui/Movie128.png")));
 			primaryStage.setTitle("M.A.C.");
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -57,12 +57,27 @@ public class Main extends Application {
 	
 	@Override
 	public void init() throws Exception {
+		createLog4J2File();
 		LOG.info("Initializing");
 		createPropertiesFile();
 		//Logger.setLogLevel(Properties.getProperty("logging.level"));
 		mkDir("generated");
 		mkDir("css");
 		mkDir("pictures");
+	}
+
+	private void createLog4J2File() {
+		File logConfigFile = new File ("config/log4j2.xml");
+		if (!logConfigFile.exists()) {
+			LOG.info("Creating log4j2.xml file");
+			try (InputStream is = getClass().getClassLoader().getResourceAsStream("resources/log4j2.xml")) {
+				FileUtils.copyInputStreamToFile(is, logConfigFile);
+			} catch (IOException e) {
+				// too bad
+				LOG.error("Error creating log4j2.xml file: ", e);
+			}
+		}
+		
 	}
 
 	private void createPropertiesFile() {

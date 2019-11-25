@@ -307,7 +307,7 @@ public class MainController {
 		// rootPane is the root of original scene in an FXML controller you get this when you assign it an id
 		Stage primaryStage = (Stage)rootPane.getScene().getWindow();
 		// creating separate TitledPane to hold the changeQuery controls
-		FXMLLoader changeQueryLoader = new FXMLLoader(Main.class.getResource("gui/ChangeQuery.fxml"));
+		FXMLLoader changeQueryLoader = new FXMLLoader(Main.class.getResource("/resources/gui/ChangeQuery.fxml"));
 		TitledPane changeQueryPane;
 		try {
 			changeQueryPane = (TitledPane)changeQueryLoader.load();
