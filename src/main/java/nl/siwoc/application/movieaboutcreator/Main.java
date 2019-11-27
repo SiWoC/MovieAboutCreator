@@ -74,7 +74,8 @@ public class Main extends Application {
 				FileUtils.copyInputStreamToFile(is, logConfigFile);
 			} catch (IOException e) {
 				// too bad
-				LOG.error("Error creating log4j2.xml file: ", e);
+				System.out.println("Error creating log4j2.xml file");
+				e.printStackTrace();
 			}
 		}
 		
@@ -88,7 +89,8 @@ public class Main extends Application {
 				FileUtils.copyInputStreamToFile(is, propertiesFile);
 			} catch (IOException e) {
 				// too bad
-				LOG.error("Error creating properties file: ", e);
+				System.out.println("Error creating properties file: ");
+				e.printStackTrace();
 			}
 		}
 		
@@ -108,7 +110,8 @@ public class Main extends Application {
 					FileUtils.copyInputStreamToFile(is, outputFile);
 					is.close();
 				} catch (Exception e) {
-					LOG.error("Error creating template files: ", e);
+					System.out.println("Error creating template files: ");
+					e.printStackTrace();
 				}
 			}
 			/*

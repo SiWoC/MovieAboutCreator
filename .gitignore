@@ -40,6 +40,7 @@ hs_err_pid*
 
 # ignore folders generated at runtime
 /log/
+/config/
 /css/
 /generated/
 /pictures/
