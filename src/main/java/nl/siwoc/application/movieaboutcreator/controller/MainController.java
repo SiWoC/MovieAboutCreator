@@ -147,7 +147,7 @@ public class MainController {
 		wvHtmlPreview.setContextMenuEnabled(false);
 		model = new MovieService();
 		model.setController(this);
-		txtMoviesFolderName.setText(Properties.getProperty("movies.foldername"));
+		txtMoviesFolderName.setText(Properties.getMoviesFolderName());
 		model.setMoviesFolderName(txtMoviesFolderName.getText());
 		lvMovies.setItems(model.getMovies());
 		lvMovies.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
@@ -165,6 +165,7 @@ public class MainController {
 			public void changed(ObservableValue<? extends MovieInfoBackgroundCollector> observable, MovieInfoBackgroundCollector oldValue, MovieInfoBackgroundCollector selectedBackgroundCollector) {
 				if (selectedBackgroundCollector != null) {
 					model.setBackgroundCollector(selectedBackgroundCollector);
+					Properties.setBackgroundCollectorName(selectedBackgroundCollector.toString());
 				}
 			}
 		});
@@ -175,6 +176,7 @@ public class MainController {
 			public void changed(ObservableValue<? extends MovieInfoFolderCollector> observable, MovieInfoFolderCollector oldValue, MovieInfoFolderCollector selectedFolderCollector) {
 				if (selectedFolderCollector != null) {
 					model.setFolderCollector(selectedFolderCollector);
+					Properties.setFolderCollectorName(selectedFolderCollector.toString());
 				}
 			}
 		});
@@ -185,6 +187,7 @@ public class MainController {
 			public void changed(ObservableValue<? extends MovieInfoDetailsCollector> observable, MovieInfoDetailsCollector oldValue, MovieInfoDetailsCollector selectedDetailsCollector) {
 				if (selectedDetailsCollector != null) {
 					model.setDetailsCollector(selectedDetailsCollector);
+					Properties.setDetailsCollectorName(selectedDetailsCollector.toString());
 				}
 			}
 		});
@@ -224,6 +227,7 @@ public class MainController {
 	public void refreshMovies(ActionEvent event) {
 		model.setMoviesFolderName(txtMoviesFolderName.getText());
 		model.refreshMovies();
+		Properties.setMoviesFolderName(txtMoviesFolderName.getText());
 	}
 
 	private void getMovieInfo(Movie movie) {
@@ -282,8 +286,7 @@ public class MainController {
 					LOG.info("Generated aboutImageFile with length: " + outputFile.length());
 					model.generateAndCopy(selectedMovie);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOG.debug("Unable to generate aboutImageFile", e);
 				} finally {
 					rootPane.setEffect(null);
 	                popupStage.hide();
@@ -317,9 +320,8 @@ public class MainController {
 	        changeQueryStage.setScene(new Scene(changeQueryPane));
 			ChangeQueryController changeQueryController = changeQueryLoader.getController();
 			changeQueryController.initData(rootPane, this, changeQueryStage, selectedMovie);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (IOException e) {
+			LOG.debug("Unable to start ChangeQueryPane", e);
 		}
 	}
 
@@ -333,6 +335,39 @@ public class MainController {
 			setStatusLine("Unable to rename movie file", e);
 		}
 		model.getMovies().set(selectedIndex, selectedMovie);
+	}
+
+	public void changePlot(ActionEvent event) {
+		Movie selectedMovie = lvMovies.getSelectionModel().getSelectedItem();
+		if (selectedMovie != null) {
+			changePlot(selectedMovie);
+		}
+	}
+	
+	private void changePlot(Movie selectedMovie) {
+		// rootPane is the root of original scene in an FXML controller you get this when you assign it an id
+		Stage primaryStage = (Stage)rootPane.getScene().getWindow();
+		// creating separate TitledPane to hold the changePlot controls
+		FXMLLoader changePlotLoader = new FXMLLoader(Main.class.getResource("/resources/gui/ChangePlot.fxml"));
+		TitledPane changePlotPane;
+		try {
+			changePlotPane = (TitledPane)changePlotLoader.load();
+	        Stage changePlotStage = new Stage(StageStyle.TRANSPARENT);
+	        changePlotStage.initOwner(primaryStage);
+	        changePlotStage.initModality(Modality.APPLICATION_MODAL);
+	        Scene changePlotScene = new Scene(changePlotPane);
+	        changePlotScene.getStylesheets().add(getClass().getResource("/resources/gui/application.css").toExternalForm());
+	        changePlotStage.setScene(changePlotScene);
+			ChangePlotController changePlotController = changePlotLoader.getController();
+			changePlotController.initData(rootPane, this, changePlotStage, selectedMovie);
+		} catch (IOException e) {
+			LOG.debug("Unable to start ChangePlotPane", e);
+		}
+	}
+
+	public void valuesChanged(Movie movie) {
+		model.writeSetValues(movie, false);
+		wvHtmlPreview.getEngine().reload();
 	}
 
 }

@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import nl.siwoc.application.movieaboutcreator.utils.Properties;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -124,4 +125,9 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+	
+	@Override
+	public void stop(){
+	    Properties.save();
+	}	
 }

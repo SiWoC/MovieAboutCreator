@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<TitledPane collapsible="false" prefHeight="414" prefWidth="424.0" text="Change plot text" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.siwoc.application.movieaboutcreator.controller.ChangePlotController">
+   <content>
+      <AnchorPane fx:id="changePlotPane">
+		   <children>
+		      <Label layoutX="22" layoutY="44" text="Plot" AnchorPane.leftAnchor="14" AnchorPane.topAnchor="18" />
+            <TextArea fx:id="txtPlot" layoutX="68.0" layoutY="33" prefHeight="295.0" prefWidth="334.0" text="De Clone Wars razen naar hun hoogtepunt als Kanselier Palpatine wordt ontvoerd door General Grievous, een inmiddels bekende Jedi-doder. Anakin Skywalker en Obi- Wan Kenobi strijden als broers in dit gevecht om hem te redden en ze gaan een laatste confrontatie aan met de leider van de seperatisten, Count Dooku. Maar als de Jedi Council eindelijk een manier heeft gevonden om de Clone Wars tot een einde te brengen en de vrede in het melkwegstelsel te herstellen, houden ze er geen rekening mee dat Anakin zich langzaam tegen de Jedi Council keert als hij een keuze moet maken tussen Obi-Wan en zijn heimelijke vrouw Padmé, die hij in een visioen heeft zien sterven. De mysterieuze Sith Lord Darth Sidious slaat voor een laatste keer hard toe en alle gebeurtenissen leiden naar de eerste Star Wars film uit 1977 als George Lucas het laatste hoofdstuk in zijn verhaal afsluit." wrapText="true" />
+            <HBox layoutX="68" layoutY="339" spacing="10" AnchorPane.bottomAnchor="14" AnchorPane.leftAnchor="59">
+               <children>
+                  <Button fx:id="btnUse" mnemonicParsing="false" onAction="#usePlot" text="Use" />
+               </children>
+            </HBox>
+      		      <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancel" text="Cancel" AnchorPane.bottomAnchor="14" AnchorPane.rightAnchor="14" />
+		   </children>
+      </AnchorPane>
+   </content>
+</TitledPane>

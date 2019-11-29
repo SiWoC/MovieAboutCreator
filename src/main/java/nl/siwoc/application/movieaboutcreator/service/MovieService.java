@@ -117,17 +117,17 @@ public class MovieService {
 	
 	public MovieService() {
 		for (MovieInfoBackgroundCollector bc : backgroundCollectors) {
-			if (bc.toString().equals(Properties.getProperty("backgroundcollector"))) {
+			if (bc.toString().equals(Properties.getBackgroudCollectorName())) {
 				setBackgroundCollector(bc);
 			}
 		}
 		for (MovieInfoFolderCollector fc : folderCollectors) {
-			if (fc.toString().equals(Properties.getProperty("foldercollector"))) {
+			if (fc.toString().equals(Properties.getFolderCollectorName())) {
 				setFolderCollector(fc);
 			}
 		}
 		for (MovieInfoDetailsCollector dc : detailsCollectors) {
-			if (dc.toString().equals(Properties.getProperty("detailscollector"))) {
+			if (dc.toString().equals(Properties.getDetailsCollectorName())) {
 				setDetailsCollector(dc);
 			}
 		}
@@ -213,7 +213,7 @@ public class MovieService {
 			writeBackgroundImage(movie);
 			writeFolderImage(movie);
 			getFileProperties(movie);
-			writeSetValues(movie);
+			writeSetValues(movie, true);
 		}
 	}
 	
@@ -253,31 +253,31 @@ public class MovieService {
 		
 	}
 	
-	private boolean writeSetValues(Movie movie) {
-		if (detailsCollector != null) {
-			try {
+	public boolean writeSetValues(Movie movie, boolean getDetails) {
+		try {
+			if (getDetails && detailsCollector != null) {
 				detailsCollector.getDetails(movie);
-				if (!controller.getSetValuesFile().exists() || controller.getSetValuesFile().canWrite()) {
-					// start
-					FileUtils.writeStringToFile(controller.getSetValuesFile(), SET_VALUES_BASE, "UTF-8", false);
-					// values
-					appendSetTextLine(controller.getSetValuesFile(), "title", movie.getTitle());
-					appendSetTextLine(controller.getSetValuesFile(), "year", movie.getYear());
-					appendSetTextLine(controller.getSetValuesFile(), "duration", getDurationString(movie.getDuration()));
-					appendSetTextLine(controller.getSetValuesFile(), "rating", getRatingString(movie.getRating()));
-					appendSetTextLine(controller.getSetValuesFile(), "plot", getPlotString(movie.getPlot()));
-					appendSetTextLine(controller.getSetValuesFile(), "directors", getDirectorsString(movie.getDirectors()));
-					appendSetTextLine(controller.getSetValuesFile(), "genres", getGenresString(movie.getGenres()));
-					appendSetTextLine(controller.getSetValuesFile(), "actors", getActorsString(movie.getActors()));
-					appendSetTextLine(controller.getSetValuesFile(), "fileprops", getFilePropsString(movie));
-					// end
-					FileUtils.writeStringToFile(controller.getSetValuesFile(), "}\r\n", "UTF-8", true);
-					controller.setStatusLine("Writen setvalues script for movie: " + movie.toString());
-					return true;
-				}
-			} catch (Exception e) {
-				controller.setStatusLine("Exception while writing setvalues script for movie: " + movie.toString(), e);
 			}
+			if (!controller.getSetValuesFile().exists() || controller.getSetValuesFile().canWrite()) {
+				// start
+				FileUtils.writeStringToFile(controller.getSetValuesFile(), SET_VALUES_BASE, "UTF-8", false);
+				// values
+				appendSetTextLine(controller.getSetValuesFile(), "title", movie.getTitle());
+				appendSetTextLine(controller.getSetValuesFile(), "year", movie.getYear());
+				appendSetTextLine(controller.getSetValuesFile(), "duration", getDurationString(movie.getDuration()));
+				appendSetTextLine(controller.getSetValuesFile(), "rating", getRatingString(movie.getRating()));
+				appendSetTextLine(controller.getSetValuesFile(), "plot", getPlotString(movie.getPlot()));
+				appendSetTextLine(controller.getSetValuesFile(), "directors", getDirectorsString(movie.getDirectors()));
+				appendSetTextLine(controller.getSetValuesFile(), "genres", getGenresString(movie.getGenres()));
+				appendSetTextLine(controller.getSetValuesFile(), "actors", getActorsString(movie.getActors()));
+				appendSetTextLine(controller.getSetValuesFile(), "fileprops", getFilePropsString(movie));
+				// end
+				FileUtils.writeStringToFile(controller.getSetValuesFile(), "}\r\n", "UTF-8", true);
+				controller.setStatusLine("Writen setvalues script for movie: " + movie.toString());
+				return true;
+			}
+		} catch (Exception e) {
+			controller.setStatusLine("Exception while writing setvalues script for movie: " + movie.toString(), e);
 		}
 		controller.setStatusLine("Unable to write setvalues script for movie: " + movie.toString());
 		return false;
@@ -463,7 +463,7 @@ public class MovieService {
 		Movie movie = new Movie(file);
 		model.getMovieInfo(movie);
 		model.writeXmlFile(movie);
-		model.writeSetValues(movie);
+		model.writeSetValues(movie, true);
 		System.out.println(getFilePropsString(movie));
 	}
 }
