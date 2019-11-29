@@ -50,13 +50,13 @@
                      <children>
                         <VBox>
                            <children>
-                              <Label text="Folder" />
+                              <Label text="Background" />
                               <ChoiceBox fx:id="cbBackgroundCollector" prefWidth="150.0" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
-                              <Label text="Background" />
+                              <Label text="Folder" />
                               <ChoiceBox fx:id="cbFolderCollector" prefWidth="150.0" />
                            </children>
                         </VBox>
