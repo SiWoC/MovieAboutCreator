@@ -52,7 +52,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MainController {
-	
+
 	protected static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
 	private File htmlFile = new File ("generated/template.html");
@@ -72,7 +72,7 @@ public class MainController {
 
 	@FXML
 	TextArea txtStatusArea;
-	
+
 	@FXML
 	WebView wvHtmlPreview;
 
@@ -129,7 +129,7 @@ public class MainController {
 	public void setStatusLine(String statusLineText) {
 		setStatusLine(statusLineText, null);
 	}
-	
+
 	public void setStatusLine(String statusLineText, Throwable e) {
 		if (txtStatusArea != null) {
 			LOG.info(statusLineText);
@@ -141,8 +141,6 @@ public class MainController {
 	}
 
 	public void initialize() {
-		//System.out.println("### loglevel: " + Properties.getProperty("logging.level"));
-		//Logger.setLogLevel(Properties.getProperty("logging.level"));
 		setStatusLine("Initializing");
 		wvHtmlPreview.setContextMenuEnabled(false);
 		model = new MovieService();
@@ -201,7 +199,7 @@ public class MainController {
 		setPreviewZoom();
 		setStatusLine("Initialized");
 	}
-	
+
 	private void setPreviewZoom() {
 		wvHtmlPreview.setZoom((rightSidePane.getWidth() - 4) / 1280);
 	}
@@ -248,7 +246,7 @@ public class MainController {
 			getMovieInfo(selectedMovie);
 		}
 	}
-	
+
 	public void generateAndCopy(ActionEvent event) {
 		Movie selectedMovie = lvMovies.getSelectionModel().getSelectedItem();
 		if (selectedMovie != null) {
@@ -256,7 +254,7 @@ public class MainController {
 			generateAndCopy(selectedMovie, htmlFile, aboutImageFile, 1280, 720);
 		}
 	}
-		
+
 	private void generateAndCopy(Movie selectedMovie, File htmlFile, File outputFile, double width, double height) {
 		// rootPane is the root of original scene in an FXML controller you get this when you assign it an id
 		rootPane.setEffect(new GaussianBlur());
@@ -267,12 +265,12 @@ public class MainController {
 		webView.setPrefSize(width, height);
 		AnchorPane snapshotRoot = new AnchorPane(webView);
 		webView.getEngine().load(htmlFile.toURI().toString());
-        Stage popupStage = new Stage(StageStyle.TRANSPARENT);
-        popupStage.initOwner(primaryStage);
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        // this popup doesn't really show anything size = 1x1, it just holds the snapshot-webview
-        popupStage.setScene(new Scene(snapshotRoot, 1, 1));
-        // pausing to make sure the webview/picture is completely rendered
+		Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+		popupStage.initOwner(primaryStage);
+		popupStage.initModality(Modality.APPLICATION_MODAL);
+		// this popup doesn't really show anything size = 1x1, it just holds the snapshot-webview
+		popupStage.setScene(new Scene(snapshotRoot, 1, 1));
+		// pausing to make sure the webview/picture is completely rendered
 		PauseTransition pt = new PauseTransition(Duration.seconds(2));
 		pt.setOnFinished(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
@@ -289,14 +287,14 @@ public class MainController {
 					LOG.debug("Unable to generate aboutImageFile", e);
 				} finally {
 					rootPane.setEffect(null);
-	                popupStage.hide();
+					popupStage.hide();
 				}
 			}
 		});
 		// pausing, after pause onFinished event will take + write snapshot
 		pt.play();
 		// GO!
-        popupStage.show();
+		popupStage.show();
 	}
 
 	public void changeQuery(ActionEvent event) {
@@ -305,7 +303,7 @@ public class MainController {
 			changeQuery(selectedMovie);
 		}
 	}
-	
+
 	private void changeQuery(Movie selectedMovie) {
 		// rootPane is the root of original scene in an FXML controller you get this when you assign it an id
 		Stage primaryStage = (Stage)rootPane.getScene().getWindow();
@@ -314,10 +312,12 @@ public class MainController {
 		TitledPane changeQueryPane;
 		try {
 			changeQueryPane = (TitledPane)changeQueryLoader.load();
-	        Stage changeQueryStage = new Stage(StageStyle.TRANSPARENT);
-	        changeQueryStage.initOwner(primaryStage);
-	        changeQueryStage.initModality(Modality.APPLICATION_MODAL);
-	        changeQueryStage.setScene(new Scene(changeQueryPane));
+			Stage changeQueryStage = new Stage(StageStyle.TRANSPARENT);
+			changeQueryStage.initOwner(primaryStage);
+			changeQueryStage.initModality(Modality.APPLICATION_MODAL);
+			Scene changeQueryScene = new Scene(changeQueryPane);
+			changeQueryScene.getStylesheets().add(getClass().getResource("/resources/gui/application.css").toExternalForm());
+			changeQueryStage.setScene(changeQueryScene);
 			ChangeQueryController changeQueryController = changeQueryLoader.getController();
 			changeQueryController.initData(rootPane, this, changeQueryStage, selectedMovie);
 		} catch (IOException e) {
@@ -343,7 +343,7 @@ public class MainController {
 			changePlot(selectedMovie);
 		}
 	}
-	
+
 	private void changePlot(Movie selectedMovie) {
 		// rootPane is the root of original scene in an FXML controller you get this when you assign it an id
 		Stage primaryStage = (Stage)rootPane.getScene().getWindow();
@@ -352,12 +352,12 @@ public class MainController {
 		TitledPane changePlotPane;
 		try {
 			changePlotPane = (TitledPane)changePlotLoader.load();
-	        Stage changePlotStage = new Stage(StageStyle.TRANSPARENT);
-	        changePlotStage.initOwner(primaryStage);
-	        changePlotStage.initModality(Modality.APPLICATION_MODAL);
-	        Scene changePlotScene = new Scene(changePlotPane);
-	        changePlotScene.getStylesheets().add(getClass().getResource("/resources/gui/application.css").toExternalForm());
-	        changePlotStage.setScene(changePlotScene);
+			Stage changePlotStage = new Stage(StageStyle.TRANSPARENT);
+			changePlotStage.initOwner(primaryStage);
+			changePlotStage.initModality(Modality.APPLICATION_MODAL);
+			Scene changePlotScene = new Scene(changePlotPane);
+			changePlotScene.getStylesheets().add(getClass().getResource("/resources/gui/application.css").toExternalForm());
+			changePlotStage.setScene(changePlotScene);
 			ChangePlotController changePlotController = changePlotLoader.getController();
 			changePlotController.initData(rootPane, this, changePlotStage, selectedMovie);
 		} catch (IOException e) {

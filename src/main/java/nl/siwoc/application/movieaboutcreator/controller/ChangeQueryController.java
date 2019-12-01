@@ -18,22 +18,22 @@ public class ChangeQueryController {
 
 	@FXML
 	AnchorPane changeQueryPane;
-	
+
 	@FXML
 	TextField txtQuery;
-	
+
 	@FXML
 	TextField txtYear;
 
 	@FXML
 	ListView<String> lvResults;
 	private ObservableList<String> observableResultsList = FXCollections.observableArrayList();
-	
+
 	private Pane rootPane;
 	private MainController mainController;
 	private Stage changeQueryStage;
 	private Movie movie;
-	
+
 	public Pane getRootPane() {
 		return rootPane;
 	}
@@ -79,9 +79,9 @@ public class ChangeQueryController {
 		txtYear.setText(String.valueOf(getMovie().getYear()));
 		getRootPane().setEffect(new GaussianBlur());
 		getChangeQueryStage().show();
-		
+
 	}
-	
+
 	public void testQuery(ActionEvent event) {
 		observableResultsList.clear();
 		for (MovieInfoDetailsCollector dc : MovieService.getDetailsCollectors() ) {
@@ -110,23 +110,23 @@ public class ChangeQueryController {
 	public void useQuery(ActionEvent event) {
 		use();
 		close();
-		
+
 	}
-	
+
 	private void use() {
 		getMovie().clearIds();
 		getMovie().setQuery(txtQuery.getText());
 		getMovie().setYear(Integer.valueOf(txtYear.getText()));
 		getMainController().reGenerate(null);
 	}
-	
+
 	public void cancel(ActionEvent event) {
 		close();
 	}
-	
+
 	public void close() {
 		rootPane.setEffect(null);
-        getChangeQueryStage().hide();
+		getChangeQueryStage().hide();
 	}
 
 }
