@@ -4,8 +4,9 @@ This java application creates the "about.jpg" for the Mede8er mediaplayer with i
 ## Main screen
 ![Main screen](docs/screenshots/Main.jpg?raw=true "Main screen")
 
-It can handle mp4, avi, mkv, dvd-iso and dvd-folders.
-It relies on your movies being in a separate folder by itself. And that the name of the movie-file is "[Title] ([year])".
+It relies on your movies being in a separate folder by itself. And that the name of the movie-file is "[Title] ([year])".  
+It reads movies with the file-extensions configured in the movieaboutcreator.properties-file.  
+File properties (container, codecs etc) are retrieved with "my" Java MediaInfo fileprober, so those are only shown for filetypes that can handle.
 
 ![Folder structure](docs/screenshots/FolderStructure.jpg?raw=true "Folder structure")
 
