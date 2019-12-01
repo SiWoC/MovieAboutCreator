@@ -29,6 +29,7 @@ public class Properties {
 	public static final String DETAILS_COLLECTOR_NAME = "detailscollector";
 	public static final String FOLDER_COLLECTOR_NAME = "foldercollector";
 	public static final String BACKGROUND_COLLECTOR_NAME = "backgroundcollector";
+	private static final String MAX_PLOT_LENGTH = "max.plot.length";
 
 
 	private static java.util.Properties mainProperties = new java.util.Properties();
@@ -88,6 +89,10 @@ public class Properties {
 
 	public static void setDetailsCollectorName(String value) {
 		setProperty(DETAILS_COLLECTOR_NAME, value);
+	}
+
+	public static int getMaxPlotLength() {
+		return Integer.valueOf(getProperty(MAX_PLOT_LENGTH));
 	}
 
 }

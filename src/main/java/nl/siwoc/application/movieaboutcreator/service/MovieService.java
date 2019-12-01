@@ -294,8 +294,9 @@ public class MovieService {
 	
 	private String getPlotString(String plot) {
 		if (plot == null) return "";
-		if (plot.length() > 485) {
-			return StringEscapeUtils.escapeHtml4(plot.substring(0, 480) + "...");
+		int maxPlotLength = Properties.getMaxPlotLength();
+		if (plot.length() > maxPlotLength) {
+			return StringEscapeUtils.escapeHtml4(plot.substring(0, maxPlotLength - 5) + "...");
 		} else {
 			return StringEscapeUtils.escapeHtml4(plot);
 		}
