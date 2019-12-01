@@ -7,7 +7,7 @@ This java application creates the "about.jpg" for the Mede8er mediaplayer with i
 It can handle mp4, avi, mkv, dvd-iso and dvd-folders.
 It relies on your movies being in a separate folder by itself. And that the name of the movie-file is "[Title] ([year])".
 
-![Folder structure](docs/screenshots/Folder structure.jpg?raw=true "Folder structure")
+![Folder structure](docs/screenshots/FolderStructure.jpg?raw=true "Folder structure")
 
 You can put the program anywhere you like.
 When you start the program it will "unpack", generate some folders with the templates, pictures etc.,
@@ -25,21 +25,21 @@ The Main screen holds several sections and options:
 6. If you are satisfied with the way the preview looks, you can generate the actual files (about.jpg, folder.jpg, "[Title] ([year]).xml" and copy them to the Movie folder.
 
 ### Change Query
-![Change Query sections](docs/screenshots/Change Query before.jpg?raw=true "Change Query sections")
+![Change Query sections](docs/screenshots/ChangeQueryBefore.jpg?raw=true "Change Query sections")
 
 The Change Query screen holds the following sections:  
 1. Here you can adjust the title and year being used.  
 2. After you changed the values you can Test them. If the collectors can find an Id, they can find a unique movie. If you want you can verify the Id's on the web.  
 3. When you are satisfied with the Query, you can either choose to Use them and Rename the Movie File accordingly. It will be renamed to "[Title] ([year])". Any Files with the same base-name as the original (like srt, xml, info) will be renamed to the new value. You can also to just Use the values leaving the File untouched.
 
-![Change Query after](docs/screenshots/Change Query after.jpg?raw=true "Change Query after")
+![Change Query after](docs/screenshots/ChangeQueryAfter.jpg?raw=true "Change Query after")
 
 ### Change Plot
 Sometimes the return plot summary doesn't fit in the reserved space.
 
-![Change Plot necessary](docs/screenshots/Change Plot necessary.jpg?raw=true "Change Plot necessary")
+![Change Plot necessary](docs/screenshots/ChangePlotNecessary.jpg?raw=true "Change Plot necessary")
 
-![Change Plot before](docs/screenshots/Change Plot before.jpg?raw=true "Change Plot before")
+![Change Plot before](docs/screenshots/ChangePlotBefore.jpg?raw=true "Change Plot before")
 
 In the Change Plot screen you can change the plot summary to your liking. The orange line gives an indication of how much room there is in the default template.
 
