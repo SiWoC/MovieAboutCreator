@@ -22,13 +22,6 @@
     -fx-mid-text-color: #646464;
     -fx-dark-text-color: #141414;
 
-	-fx-focus-color: #4a00bd;
-	-fx-faint-focus-color: #4a00bd22;
-
-    /* A purple for highlighting/accenting objects.  For example: selected
-     * text; selected items in menus, lists, trees, and tables; progress bars */
-    -fx-accent: #18003d;
-
     /* color of non-focused yet selected elements */
     -fx-selection-bar-non-focused: #323232;
 }
