@@ -51,6 +51,7 @@ public class MovieDetails {
 	private Credits credits;
 	private ArrayList<String> directors = new ArrayList<String>();
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Belongs_to_collection {
 		private long id;
 		private String name;
@@ -94,6 +95,7 @@ public class MovieDetails {
 		}
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Genre {
 		private long id;
 		private String name;
@@ -120,6 +122,7 @@ public class MovieDetails {
 
 	}	
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Company {
 		private long id;
 		private String logo_path;
@@ -163,6 +166,7 @@ public class MovieDetails {
 		}
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Country {
 		private String iso_3166_1;
 		private String name;
@@ -188,6 +192,7 @@ public class MovieDetails {
 		}
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Language {
 		private String iso_639_1;
 		private String name;
@@ -213,6 +218,7 @@ public class MovieDetails {
 		}
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public class Credits {
 		private ArrayList<CastMember> cast = new ArrayList<CastMember>();
 		private ArrayList<CrewMember> crew = new ArrayList<CrewMember>();
@@ -235,6 +241,7 @@ public class MovieDetails {
 
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class CrewMember {
 		private String credit_id;
 		private String department;
@@ -307,6 +314,7 @@ public class MovieDetails {
 
 	}
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class CastMember {
 		private long cast_id;
 		private String character;

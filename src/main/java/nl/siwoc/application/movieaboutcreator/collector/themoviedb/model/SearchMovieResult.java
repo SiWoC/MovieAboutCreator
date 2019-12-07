@@ -18,6 +18,9 @@ package nl.siwoc.application.movieaboutcreator.collector.themoviedb.model;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchMovieResult {
 	private float popularity;
 	private long vote_count;

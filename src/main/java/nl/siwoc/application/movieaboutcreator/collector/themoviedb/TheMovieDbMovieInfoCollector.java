@@ -49,7 +49,6 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	final ObjectMapper mapper = new ObjectMapper();
 	
-	@Override
 	public boolean getDetails(Movie movie) throws Exception {
 		String theMovieDbId = getTheMovieDbId(movie);
 		if (theMovieDbId != null) {
@@ -62,7 +61,6 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		return false;
 	}
 
-	@Override
 	public byte[] getFolder(Movie movie) throws Exception {
 		byte[] image = null;
 		String theMovieDbId = getTheMovieDbId(movie);
@@ -75,7 +73,6 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		return image;
 	}
 
-	@Override
 	public byte[] getBackground(Movie movie) throws Exception {
 		byte[] image = null;
 		String theMovieDbId = getTheMovieDbId(movie);
@@ -286,7 +283,6 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		System.out.println(" id " + mic.getTheMovieDbId(movie));
 	}
 
-	@Override
 	public String getName() {
 		return "TheMovieDb";
 	}

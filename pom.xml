@@ -79,7 +79,7 @@
 						</goals>
 						<configuration>
 							<headerType>${project.package.exe.headerType}</headerType>
-							<outfile>c:/temp/${project.artifactId}.exe</outfile>
+							<outfile>c:/temp/mac/${project.artifactId}.exe</outfile>
 							<jar>target/${project.artifactId}-${project.version}.jar</jar>
 							<dontWrapJar>false</dontWrapJar>
 							<errTitle>Error running ${project.name}</errTitle>
@@ -89,7 +89,7 @@
                         	<classPath>
                             	<mainClass>nl.siwoc.application.movieaboutcreator.Main</mainClass>
                             	<addDependencies>false</addDependencies>
-                            	<preCp>config</preCp>
+                            	<preCp>config;lib/*.jar</preCp>
                         	</classPath>
                         	<icon>${basedir}/src/main/resources/gui/Movie128.ico</icon>
 							<splash>
@@ -122,7 +122,7 @@
 						</goals>
 						<phase>package</phase>
 						<configuration>
-							<file>c:/temp/${project.artifactId}.exe</file>
+							<file>c:/temp/mac/${project.artifactId}.exe</file>
 							<name>${project.artifactId}</name>
 							<keystore>N:/Niek/Progs/SiWoC-keystore.pfx</keystore>
 							<alias>SiWoC</alias>

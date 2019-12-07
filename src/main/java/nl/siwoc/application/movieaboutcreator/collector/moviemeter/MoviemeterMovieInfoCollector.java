@@ -45,7 +45,6 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	final ObjectMapper mapper = new ObjectMapper();
 	
-	@Override
 	public boolean getDetails(Movie movie) throws Exception {
 		String moviemeterId = getMoviemeterId(movie);
 		if (moviemeterId != null) {
@@ -58,7 +57,6 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		return false;
 	}
 
-	@Override
 	public byte[] getFolder(Movie movie) throws Exception {
 		String moviemeterId = getMoviemeterId(movie);
 		byte[] image = null;
@@ -269,7 +267,6 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		System.out.println(" id " + mic.getMoviemeterId(movie));
 	}
 
-	@Override
 	public String getName() {
 		return "Moviemeter";
 	}

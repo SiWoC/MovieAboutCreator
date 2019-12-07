@@ -18,8 +18,12 @@ package nl.siwoc.application.movieaboutcreator.collector.themoviedb.model;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GetConfigurationResponse {
 
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public class Images {
 		private String base_url;
 		private String secure_base_url;
