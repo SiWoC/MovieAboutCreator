@@ -19,7 +19,7 @@ After that you will be shown the Main screen.
 
 The Main screen holds several sections and options:
 1. In this section you can choose the folder which holds your movie(folders). If the program was already open and you made changes to the contents, you can refresh the list.
-2. In this section you can choose which collector to use to get the background, folder and details.
+2. In this section you can choose which collector to use to get the background, folder and details. Currently included are [TheMovieDB](https://www.themoviedb.org/) for background, folder and detail, [MovieMeter.nl](https://www.moviemeter.nl/) for folder and Dutch details.
 3. After you change a collector, press Re-generate to re-generate the picture. Warning! this will overwrite any changes to the plot you made.
 4. If with the current title/year/query the collectors can't retrieve the data of the movie, you can change the way the search is performed.
 5. If the details-collector retrieved a plot summary which doesn't fit in the templates reserved space you can modify it to your liking.
