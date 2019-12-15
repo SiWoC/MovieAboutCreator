@@ -64,15 +64,16 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 			MovieDetails movieDetails = getDetailsFromApi(movie);
 			if (movieDetails != null && movieDetails.getPosters() != null && movieDetails.getPosters().getRegular() != null) {
 				String folderURL = movieDetails.getPosters().getRegular();
-				LOG.trace("folder: " + folderURL);
+				LOG.debug("folder: " + folderURL);
 				byte[] result = null;
 				HttpURLConnection conn = null;
 				
 				// call moviemeter api
 				try {
 					URL url = new URL(folderURL);
-					LOG.trace("HTTP folderImage call: " + url);
+					LOG.debug("HTTP folderImage call: " + url);
 					conn = (HttpURLConnection) url.openConnection();
+					conn.addRequestProperty("User-Agent", Configuration.UserAgent);
 					conn.setRequestMethod("GET");
 					if (conn.getResponseCode() != 200) {
 						if (conn.getResponseCode() == 404) {
@@ -108,8 +109,9 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call moviemeter api
 		try {
 			URL url = new URL(Configuration.BaseUrl + moviemeterId + "?api_key=" + Configuration.ApiKey);
-			LOG.trace("HTTP details call: " + url);
+			LOG.debug("HTTP details call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
+			conn.addRequestProperty("User-Agent", Configuration.UserAgent);
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
 				if (conn.getResponseCode() == 404) {
@@ -166,8 +168,9 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call moviemeter api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "?q=" + query + "&api_key=" + Configuration.ApiKey);
-			LOG.trace("HTTP search call: " + url);
+			LOG.debug("HTTP search call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
+			conn.addRequestProperty("User-Agent", Configuration.UserAgent);
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
 				if (conn.getResponseCode() == 404) {
