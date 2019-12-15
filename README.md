@@ -35,6 +35,8 @@ The Change Query screen holds the following sections:
 
 ![Change Query after](docs/screenshots/ChangeQueryAfter.jpg?raw=true "Change Query after")
 
+If all else fails, you can also put [ID MOVIEMETER xxx] or [ID THEMOVIEDB yyy] in the filename after the year.
+
 ### Change Plot
 Sometimes the return plot summary doesn't fit in the reserved space.
 
@@ -45,6 +47,7 @@ Sometimes the return plot summary doesn't fit in the reserved space.
 In the Change Plot screen you can change the plot summary to your liking. The orange line gives an indication of how much room there is in the default template.
 
 ### Advanced
+##### Changing the template
 ![Changed the template](docs/screenshots/Advanced.jpg?raw=true "Changed the template")
 
 If you want, you can change the template (in the generated folder), pictures and/or css to your liking.  
