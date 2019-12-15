@@ -27,11 +27,11 @@ import nl.siwoc.application.movieaboutcreator.utils.Properties;
 
 public class MovieFileFilter implements FileFilter {
 
-	private static List<String> movieExtensions = Arrays.asList(Properties.getProperty("movies.extensions").split(",")); 
+	private static List<String> movieExtensions = Arrays.asList(Properties.getProperty("movies.extensions").toUpperCase().split(",")); 
 	
 	@Override
 	public boolean accept(File file) {
-		return file.isDirectory() && file.getName().equals("VIDEO_TS") || movieExtensions.contains(FilenameUtils.getExtension(file.getName()));
+		return file.isDirectory() && file.getName().equals("VIDEO_TS") || movieExtensions.contains(FilenameUtils.getExtension(file.getName().toUpperCase()));
 	}
 
 }

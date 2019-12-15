@@ -93,7 +93,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 			// call image api
 			try {
 				URL url = new URL(imageUrl);
-				LOG.trace("HTTP imageUrl call: " + url);
+				LOG.debug("HTTP imageUrl call: " + url);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				if (conn.getResponseCode() != 200) {
@@ -125,7 +125,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call movie api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "movie/" + theMovieDbId + "?api_key=" + Configuration.ApiKey + "&language=en-US&append_to_response=credits");
-			LOG.trace("HTTP details call: " + url);
+			LOG.debug("HTTP details call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
@@ -185,7 +185,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		// call search movie api
 		try {
 			URL url = new URL(Configuration.BaseUrl + "search/movie?api_key=" + Configuration.ApiKey + "&include_adult=false&query=" + query);
-			LOG.trace("HTTP search call: " + url);
+			LOG.debug("HTTP search call: " + url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() != 200) {
