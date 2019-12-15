@@ -1,6 +1,10 @@
 # MovieAboutCreator
 This java application creates the "about.jpg" for the Mede8er mediaplayer with info about the movie
 
+## Installation
+Just download the exe-file, put it anywhere you like, I advise a folder of it's own, and run it.
+It will "unpack/generate" some extra stuff and that's it.
+
 ## Main screen
 ![Main screen](docs/screenshots/Main.jpg?raw=true "Main screen")
 
