@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,16 +34,17 @@ import nl.siwoc.application.movieaboutcreator.collector.MovieInfoDetailsCollecto
 import nl.siwoc.application.movieaboutcreator.collector.moviemeter.model.MovieDetails;
 import nl.siwoc.application.movieaboutcreator.collector.moviemeter.model.SearchMovieResult;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
+import nl.siwoc.application.movieaboutcreator.utils.HttpUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,MovieInfoFolderCollector {
-	
-	protected static final Logger LOG = LoggerFactory.getLogger(MoviemeterMovieInfoCollector.class);
+
+	public static final Logger LOG = LoggerFactory.getLogger(MoviemeterMovieInfoCollector.class);
 
 	final ObjectMapper mapper = new ObjectMapper();
-	
+
 	public boolean getDetails(Movie movie) throws Exception {
 		String moviemeterId = getMoviemeterId(movie);
 		if (moviemeterId != null) {
@@ -64,27 +64,22 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 			MovieDetails movieDetails = getDetailsFromApi(movie);
 			if (movieDetails != null && movieDetails.getPosters() != null && movieDetails.getPosters().getRegular() != null) {
 				String folderURL = movieDetails.getPosters().getRegular();
-				LOG.debug("folder: " + folderURL);
 				byte[] result = null;
 				HttpURLConnection conn = null;
-				
+
 				// call moviemeter api
 				try {
-					URL url = new URL(folderURL);
-					LOG.debug("HTTP folderImage call: " + url);
-					conn = (HttpURLConnection) url.openConnection();
-					conn.addRequestProperty("User-Agent", Configuration.UserAgent);
-					conn.setRequestMethod("GET");
+					conn = HttpUtils.getConnection(folderURL);
 					if (conn.getResponseCode() != 200) {
 						if (conn.getResponseCode() == 404) {
 							return result;
 						}
-						throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
+						throw new Exception("Get Folder failed : HTTP error code : " + conn.getResponseCode() + " " + conn.getResponseMessage());
 					}
-					
+
 					InputStream is = conn.getInputStream();
 					image = IOUtils.toByteArray(is);
-					
+
 				} catch (Exception e) {
 					throw e;
 				} finally {
@@ -101,27 +96,23 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		String moviemeterId = movie.getId(Configuration.IdType);
 		MovieDetails movieDetails = null;
 		HttpURLConnection conn = null;
-		
+
 		if (moviemeterId == null) {
 			return null;
 		}
-		
+
 		// call moviemeter api
 		try {
-			URL url = new URL(Configuration.BaseUrl + moviemeterId + "?api_key=" + Configuration.ApiKey);
-			LOG.debug("HTTP details call: " + url);
-			conn = (HttpURLConnection) url.openConnection();
-			conn.addRequestProperty("User-Agent", Configuration.UserAgent);
-			conn.setRequestMethod("GET");
+			conn = HttpUtils.getConnection(Configuration.BaseUrl + moviemeterId + "?api_key=" + Configuration.ApiKey);
 			if (conn.getResponseCode() != 200) {
 				if (conn.getResponseCode() == 404) {
 					return movieDetails;
 				}
-				throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
+				throw new Exception("Get Details failed : HTTP error code : " + conn.getResponseCode() + " " + conn.getResponseMessage());
 			}
-			
+
 			movieDetails = mapper.readValue(conn.getInputStream(), MovieDetails.class);
-			
+
 		} catch (Exception e) {
 			throw e;
 		} finally {
@@ -164,23 +155,19 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		String query = createQuery(movie);
 		ArrayList<SearchMovieResult> result = new ArrayList<SearchMovieResult>();
 		HttpURLConnection conn = null;
-		
+
 		// call moviemeter api
 		try {
-			URL url = new URL(Configuration.BaseUrl + "?q=" + query + "&api_key=" + Configuration.ApiKey);
-			LOG.debug("HTTP search call: " + url);
-			conn = (HttpURLConnection) url.openConnection();
-			conn.addRequestProperty("User-Agent", Configuration.UserAgent);
-			conn.setRequestMethod("GET");
+			conn = HttpUtils.getConnection(Configuration.BaseUrl + "?q=" + query + "&api_key=" + Configuration.ApiKey);
 			if (conn.getResponseCode() != 200) {
 				if (conn.getResponseCode() == 404) {
 					return result;
 				}
-				throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
+				throw new Exception("Search failed : HTTP error code : " + conn.getResponseCode() + " " + conn.getResponseMessage());
 			}
-			
+
 			result = new ArrayList<SearchMovieResult>(Arrays.asList(mapper.readValue(conn.getInputStream(), SearchMovieResult[].class)));
-			
+
 		} catch (Exception e) {
 			throw e;
 		} finally {
@@ -190,9 +177,9 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		}
 
 		return result;
-		
+
 	}
-	
+
 	private String createQuery(Movie movie) {
 		try {
 			return URLEncoder.encode(movie.getQuery(), "UTF-8");
@@ -211,7 +198,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 			if (searchMovieResultSet.size() == 1) {
 				return String.valueOf(searchMovieResultSet.get(0).getId());
 			}
-			
+
 			// multiple films found, filter on year
 			int yearToFind = movie.getYear();
 			ArrayList<SearchMovieResult> haveYearResults = new ArrayList<SearchMovieResult>();
@@ -261,7 +248,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 		System.out.println(" id " + mic.getMoviemeterId(movie));
 		mic.getFolder(movie);
 		movie = new Movie(new File("Battleship 2012 720p BRRiP XViD AC3-LEGi0N_NL ingebakken.avi"));
-		//movie = new Movie(new File("Battleship (2012).avi"));
+		movie = new Movie(new File("Battleship (2012).avi"));
 		System.out.println(" getDetails returned: " + mic.getDetails(movie));
 		System.out.println(" id " + mic.getMoviemeterId(movie));
 		movie.setQuery("Battleship");
@@ -273,7 +260,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 	public String getName() {
 		return "Moviemeter";
 	}
-	
+
 	public String toString() {
 		return getName();
 	}

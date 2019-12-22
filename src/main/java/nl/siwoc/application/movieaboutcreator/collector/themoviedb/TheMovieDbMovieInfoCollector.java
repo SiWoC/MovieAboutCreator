@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
@@ -39,6 +38,7 @@ import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.SearchM
 import nl.siwoc.application.movieaboutcreator.collector.themoviedb.model.SearchMovieResult;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
 import nl.siwoc.application.movieaboutcreator.model.Movie.Actor;
+import nl.siwoc.application.movieaboutcreator.utils.HttpUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,12 +92,9 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 			// call image api
 			try {
-				URL url = new URL(imageUrl);
-				LOG.debug("HTTP imageUrl call: " + url);
-				conn = (HttpURLConnection) url.openConnection();
-				conn.setRequestMethod("GET");
+				conn = HttpUtils.getConnection(imageUrl);
 				if (conn.getResponseCode() != 200) {
-					throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
+					throw new Exception("Get Image failed : HTTP error code : " + conn.getResponseCode() + " " + conn.getResponseMessage());
 				}
 
 				InputStream is = conn.getInputStream();
@@ -124,15 +121,12 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		
 		// call movie api
 		try {
-			URL url = new URL(Configuration.BaseUrl + "movie/" + theMovieDbId + "?api_key=" + Configuration.ApiKey + "&language=en-US&append_to_response=credits");
-			LOG.debug("HTTP details call: " + url);
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
+			conn = HttpUtils.getConnection(Configuration.BaseUrl + "movie/" + theMovieDbId + "?api_key=" + Configuration.ApiKey + "&language=en-US&append_to_response=credits");
 			if (conn.getResponseCode() != 200) {
 				if (conn.getResponseCode() == 404) {
 					return movieDetails;
 				}
-				throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
+				throw new Exception("Get Details failed : HTTP error code : " + conn.getResponseCode() + " " + conn.getResponseMessage());
 			}
 			
 			movieDetails = mapper.readValue(conn.getInputStream(), MovieDetails.class);
@@ -184,12 +178,9 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		
 		// call search movie api
 		try {
-			URL url = new URL(Configuration.BaseUrl + "search/movie?api_key=" + Configuration.ApiKey + "&include_adult=false&query=" + query);
-			LOG.debug("HTTP search call: " + url);
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
+			conn = HttpUtils.getConnection(Configuration.BaseUrl + "search/movie?api_key=" + Configuration.ApiKey + "&include_adult=false&query=" + query);
 			if (conn.getResponseCode() != 200) {
-				throw new Exception("Failed : HTTP error code : " + conn.getResponseCode());
+				throw new Exception("Search failed : HTTP error code : " + conn.getResponseCode() + " " + conn.getResponseMessage());
 			}
 			
 			searchMovieResponse = mapper.readValue(conn.getInputStream(), SearchMovieResponse.class);
@@ -274,7 +265,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 		Movie movie; 
 		TheMovieDbMovieInfoCollector mic = new TheMovieDbMovieInfoCollector();
 		movie = new Movie(new File("Battleship 2012 720p BRRiP XViD AC3-LEGi0N_NL ingebakken.avi"));
-		//movie = new Movie(new File("Battleship (2012).avi"));
+		movie = new Movie(new File("Battleship (2012).avi"));
 		System.out.println(" getDetails returned: " + mic.getDetails(movie));
 		System.out.println(" id " + mic.getTheMovieDbId(movie));
 		movie.setQuery("Battleship");

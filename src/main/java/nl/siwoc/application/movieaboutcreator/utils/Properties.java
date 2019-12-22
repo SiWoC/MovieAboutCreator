@@ -94,5 +94,9 @@ public class Properties {
 	public static int getMaxPlotLength() {
 		return Integer.valueOf(getProperty(MAX_PLOT_LENGTH));
 	}
+	
+	public static String getUserAgent() {
+		return getProperty("User-Agent");
+	}
 
 }
