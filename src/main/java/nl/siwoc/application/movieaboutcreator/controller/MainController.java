@@ -65,6 +65,9 @@ public class MainController {
 	AnchorPane rootPane;
 
 	@FXML
+	CheckBox chkOnlyNew;
+
+	@FXML
 	TextField txtMoviesFolderName;
 
 	@FXML
@@ -146,6 +149,7 @@ public class MainController {
 		model = new MovieService();
 		model.setController(this);
 		txtMoviesFolderName.setText(Properties.getMoviesFolderName());
+		chkOnlyNew.setSelected(Properties.getOnlyNew());
 		model.setMoviesFolderName(txtMoviesFolderName.getText());
 		lvMovies.setItems(model.getMovies());
 		lvMovies.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Movie>() {
@@ -220,6 +224,11 @@ public class MainController {
 			}
 			refreshMovies(event);
 		}
+	}
+	
+	public void toggleOnlyNew (ActionEvent event) {
+		Properties.setOnlyNew(chkOnlyNew.isSelected());
+		model.refreshMovies();
 	}
 
 	public void refreshMovies(ActionEvent event) {

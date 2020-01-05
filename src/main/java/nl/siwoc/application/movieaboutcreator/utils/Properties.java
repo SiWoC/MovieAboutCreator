@@ -26,6 +26,7 @@ public class Properties {
 
 	private static final String PROPERTIES_FILENAME = "movieaboutcreator.properties";
 	public static final String MOVIES_FOLDERNAME = "movies.foldername";
+	public static final String MOVIES_ONLY_NEW = "movies.only.new";
 	public static final String DETAILS_COLLECTOR_NAME = "detailscollector";
 	public static final String FOLDER_COLLECTOR_NAME = "foldercollector";
 	public static final String BACKGROUND_COLLECTOR_NAME = "backgroundcollector";
@@ -97,6 +98,14 @@ public class Properties {
 	
 	public static String getUserAgent() {
 		return getProperty("User-Agent");
+	}
+
+	public static boolean getOnlyNew() {
+		return "true".equals(getProperty(MOVIES_ONLY_NEW));
+	}
+
+	public static void setOnlyNew(boolean value) {
+		setProperty(MOVIES_ONLY_NEW, String.valueOf(value));
 	}
 
 }

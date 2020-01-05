@@ -31,6 +31,9 @@ public class MovieFileFilter implements FileFilter {
 	
 	@Override
 	public boolean accept(File file) {
+		if (Properties.getOnlyNew() && new File(file.getParentFile(), "about.jpg").exists()) {
+			return false;
+		}
 		return file.isDirectory() && file.getName().equals("VIDEO_TS") || movieExtensions.contains(FilenameUtils.getExtension(file.getName().toUpperCase()));
 	}
 
