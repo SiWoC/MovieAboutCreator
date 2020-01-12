@@ -32,7 +32,6 @@ public class Configuration {
 	
 	protected static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
-	public static final String IdType = "themoviedb";
 	public static String ApiKey = Properties.getProperty("themoviedb.apikey");
 	public static String BaseUrl = Properties.getProperty("themoviedb.rest.baseurl");
 	public static String ImageBaseUrl = null;

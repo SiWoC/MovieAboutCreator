@@ -23,5 +23,7 @@ public interface MovieInfoDetailsCollector {
 	public boolean getDetails(Movie movie) throws Exception;
 
 	public String getName();
-	
+
+	public String getIdType();
+
 }

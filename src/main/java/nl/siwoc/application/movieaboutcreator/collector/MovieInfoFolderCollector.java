@@ -24,4 +24,6 @@ public interface MovieInfoFolderCollector {
 
 	public String getName();
 
+	public String getIdType();
+	
 }

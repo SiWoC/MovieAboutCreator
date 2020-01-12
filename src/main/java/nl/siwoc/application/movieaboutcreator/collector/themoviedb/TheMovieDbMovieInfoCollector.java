@@ -111,7 +111,7 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 	}
 
 	private MovieDetails getDetailsFromApi(Movie movie) throws Exception {
-		String theMovieDbId = movie.getId(Configuration.IdType);
+		String theMovieDbId = movie.getId(getIdType());
 		MovieDetails movieDetails = null;
 		HttpURLConnection conn = null;
 		
@@ -159,12 +159,12 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	public String getTheMovieDbId(Movie movie) throws Exception
 	{
-		String theMovieDbId = movie.getId(Configuration.IdType);
+		String theMovieDbId = movie.getId(getIdType());
 		if (!StringUtils.isNumeric(theMovieDbId))
 		{
 			theMovieDbId = getMovieId(searchMovie(movie), movie);
 			if (theMovieDbId != null) {
-				movie.setId(Configuration.IdType, theMovieDbId);
+				movie.setId(getIdType(), theMovieDbId);
 			}
 		}
 		return theMovieDbId;
@@ -276,6 +276,10 @@ public class TheMovieDbMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	public String getName() {
 		return "TheMovieDb";
+	}
+
+	public String getIdType() {
+		return "themoviedb";
 	}
 
 	public String toString() {

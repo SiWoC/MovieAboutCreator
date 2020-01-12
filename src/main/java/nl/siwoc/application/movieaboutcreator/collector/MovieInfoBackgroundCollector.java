@@ -23,5 +23,7 @@ public interface MovieInfoBackgroundCollector {
 	public byte[] getBackground(Movie movie) throws Exception;
 
 	public String getName();
+	
+	public String getIdType();
 
 }

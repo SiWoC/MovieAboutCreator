@@ -93,7 +93,7 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 	}
 
 	private MovieDetails getDetailsFromApi(Movie movie) throws Exception {
-		String moviemeterId = movie.getId(Configuration.IdType);
+		String moviemeterId = movie.getId(getIdType());
 		MovieDetails movieDetails = null;
 		HttpURLConnection conn = null;
 
@@ -140,12 +140,12 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	public String getMoviemeterId(Movie movie) throws Exception
 	{
-		String moviemeterId = movie.getId(Configuration.IdType);
+		String moviemeterId = movie.getId(getIdType());
 		if (!StringUtils.isNumeric(moviemeterId))
 		{
 			moviemeterId = getMovieId(searchMovie(movie), movie);
 			if (moviemeterId != null) {
-				movie.setId(Configuration.IdType, moviemeterId);
+				movie.setId(getIdType(), moviemeterId);
 			}
 		}
 		return moviemeterId;
@@ -259,6 +259,10 @@ public class MoviemeterMovieInfoCollector implements MovieInfoDetailsCollector,M
 
 	public String getName() {
 		return "Moviemeter";
+	}
+
+	public String getIdType() {
+		return "moviemeter";
 	}
 
 	public String toString() {

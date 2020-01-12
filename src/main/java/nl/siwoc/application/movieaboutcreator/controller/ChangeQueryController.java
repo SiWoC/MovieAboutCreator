@@ -1,5 +1,7 @@
 package nl.siwoc.application.movieaboutcreator.controller;
 
+import java.util.ArrayList;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,7 +12,9 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import nl.siwoc.application.movieaboutcreator.collector.MovieInfoBackgroundCollector;
 import nl.siwoc.application.movieaboutcreator.collector.MovieInfoDetailsCollector;
+import nl.siwoc.application.movieaboutcreator.collector.MovieInfoFolderCollector;
 import nl.siwoc.application.movieaboutcreator.model.Movie;
 import nl.siwoc.application.movieaboutcreator.service.MovieService;
 
@@ -83,20 +87,58 @@ public class ChangeQueryController {
 	}
 
 	public void testQuery(ActionEvent event) {
+		ArrayList<String> tested = new ArrayList<String>();
 		observableResultsList.clear();
-		for (MovieInfoDetailsCollector dc : MovieService.getDetailsCollectors() ) {
-			Movie testMovie = new Movie();
-			testMovie.setQuery(txtQuery.getText());
-			testMovie.setYear(Integer.valueOf(txtYear.getText()));
-			boolean result = false;
-			try {
-				result = dc.getDetails(testMovie);
-			} catch (Exception e) {
+		Movie testMovie = new Movie();
+		testMovie.setQuery(txtQuery.getText());
+		testMovie.setYear(Integer.valueOf(txtYear.getText()));
+		boolean result = false;
+		// Background
+		for (MovieInfoBackgroundCollector bc : MovieService.getBackgroundCollectors() ) {
+			result = false;
+			if (!tested.contains(bc.getName())) {
+				tested.add(bc.getName());
+				try {
+					result = (bc.getBackground(testMovie).length > 0);
+				} catch (Exception e) {
+				}
+				if (result) {
+					observableResultsList.add(bc.getName() + " Id " + testMovie.getId(bc.getIdType()));
+				} else {
+					observableResultsList.add(bc.getName() + " no result");
+				}
 			}
-			if (result) {
-				observableResultsList.add(dc.getName() + " Id " + testMovie.getId(dc.getName().toLowerCase()));
-			} else {
-				observableResultsList.add(dc.getName() + " no result");
+		}
+		// Folder
+		for (MovieInfoFolderCollector fc : MovieService.getFolderCollectors() ) {
+			result = false;
+			if (!tested.contains(fc.getName())) {
+				tested.add(fc.getName());
+				try {
+					result = (fc.getFolder(testMovie).length > 0);
+				} catch (Exception e) {
+				}
+				if (result) {
+					observableResultsList.add(fc.getName() + " Id " + testMovie.getId(fc.getIdType()));
+				} else {
+					observableResultsList.add(fc.getName() + " no result");
+				}
+			}
+		}
+		// Details
+		for (MovieInfoDetailsCollector dc : MovieService.getDetailsCollectors() ) {
+			result = false;
+			if (!tested.contains(dc.getName())) {
+				tested.add(dc.getName());
+				try {
+					result = dc.getDetails(testMovie);
+				} catch (Exception e) {
+				}
+				if (result) {
+					observableResultsList.add(dc.getName() + " Id " + testMovie.getId(dc.getIdType()));
+				} else {
+					observableResultsList.add(dc.getName() + " no result");
+				}
 			}
 		}
 	}
