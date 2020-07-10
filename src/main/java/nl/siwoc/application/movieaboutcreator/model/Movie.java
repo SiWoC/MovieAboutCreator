@@ -280,10 +280,10 @@ public class Movie {
 		// nothing I want to do about "Some Movie (1080p DTS) (2019)", just rename your file
 		String[] nameParts = _name.split("\\(");
 		int year = 0;
-		for (String namePart : nameParts) {
-			if (namePart.length() > 3) {
+		for (int i = 1 ; i < nameParts.length ; i++) {
+			if (nameParts[i].length() > 3) {
 				try {
-					year = Integer.parseInt(namePart.substring(0, 4));
+					year = Integer.parseInt(nameParts[i].substring(0, 4));
 					if (year > 0) {
 						setYear(year);
 						break;
