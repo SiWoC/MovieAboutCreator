@@ -32,10 +32,11 @@ container_mkv.png
 container_mov.png
 container_mp4.png
 container_mpg.png
+container_bluray.png
 divider.png
 output_8k.png
 output_4k.png
-output_uhd.png
+output_qhd.png
 output_1080i.png
 output_1080p.png
 output_720p.png

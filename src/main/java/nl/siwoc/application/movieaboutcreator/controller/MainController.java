@@ -145,7 +145,7 @@ public class MainController {
 
 	public void initialize() {
 		setStatusLine("Initializing");
-		wvHtmlPreview.setContextMenuEnabled(false);
+		wvHtmlPreview.setContextMenuEnabled(true);
 		model = new MovieService();
 		model.setController(this);
 		txtMoviesFolderName.setText(Properties.getMoviesFolderName());
