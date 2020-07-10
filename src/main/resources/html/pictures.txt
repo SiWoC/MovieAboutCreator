@@ -33,6 +33,9 @@ container_mov.png
 container_mp4.png
 container_mpg.png
 divider.png
+output_8k.png
+output_4k.png
+output_uhd.png
 output_1080i.png
 output_1080p.png
 output_720p.png
@@ -49,12 +52,12 @@ rating_60.png
 rating_70.png
 rating_80.png
 rating_90.png
-Thumbs.db
 transparent.pdn
 transparent.png
 videocodec_divx.png
 videocodec_divx_orig.png
 videocodec_h264.png
+videocodec_h265.png
 videocodec_mpeg.png
 videocodec_ms.png
 videocodec_xvid.png

@@ -18,6 +18,9 @@ package nl.siwoc.application.movieaboutcreator.model.fileprops;
 
 public enum Resolution implements FileProp {
 
+	RES8K("RES8K","output_8k.png"),
+	RES4K("RES4K","output_4k.png"),
+	RESQHD("RESQHD","output_qhd.png"),
 	RES1080("RES1080","output_1080p.png"),
 	RES720("RES720","output_720p.png"),
 	PAL("PAL","output_pal.png"),
@@ -48,7 +51,13 @@ public enum Resolution implements FileProp {
 	}
 	
 	public static Resolution getResolution(int width, int height) throws IllegalArgumentException {
-		if (height > 720 || width > 1280) {
+		if (height > 2160 || width > 3840) {
+			return RES8K;
+		} else if (height > 1440 || width > 2560) {
+			return RES4K;
+		} else if (height > 1080 || width > 1920) {
+			return RESQHD;
+		} else if (height > 720 || width > 1280) {
 			return RES1080;
 		} else if (height > 576 || width > 720) {
 			return RES720;
