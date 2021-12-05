@@ -6,14 +6,14 @@
 	<groupId>nl.siwoc.application.movieaboutcreator</groupId>
 	<artifactId>MovieAboutCreator</artifactId>
 	<description>This java application creates the &quot;about.jpg&quot; for the Mede8er mediaplayer with info about the movie.</description>
-	<version>1.1</version>
+	<version>1.1.0.1</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.package.exe.headerType>gui</project.package.exe.headerType>
-		<project.package.exe.fileVersion>1.1.0.0</project.package.exe.fileVersion>
-		<project.package.exe.productVersion>1.1.0.0</project.package.exe.productVersion>
-		<project.copyright>Copyleft Niek Knijnenburg (c) 2019</project.copyright>
+		<project.package.exe.fileVersion>1.1.0.1</project.package.exe.fileVersion>
+		<project.package.exe.productVersion>1.1.0.1</project.package.exe.productVersion>
+		<project.copyright>Copyleft Niek Knijnenburg (c) 2021</project.copyright>
 	</properties>
 
 
@@ -161,7 +161,7 @@
 		<dependency>
 			<groupId>nl.siwoc.mediainfo</groupId>
 			<artifactId>MediaInfo</artifactId>
-			<version>1.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
