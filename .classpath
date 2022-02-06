@@ -39,5 +39,6 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/eclipse/workspace/FanartTvMovieInfoCollector/target/FanartTvCollectors-0.0.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
